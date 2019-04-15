@@ -82,7 +82,7 @@
     shellAliases = {
       setup-proxies = "$HOME/Developer/scripts/setup-proxies.sh && source ~/.zshrc";
       remove-proxies = "$HOME/Developer/scripts/remove-proxies.sh && source ~/.zshrc";
-      Emacs = "emacs --daemon";
+      Emacs = "/run/current-system/Applications/Emacs.app/Contents/MacOS/Emacs --daemon";
       ec = "nohup emacsclient -nqc \"$@\" &> /dev/null";
       cdp = "cd ~/Developer/src/personal/";
       cdw = "cd ~/Developer/src/work/";
