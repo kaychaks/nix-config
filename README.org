@@ -1,0 +1,2 @@
+
+   My [[https://github.com/LnL7/nix-darwin][nix-darwin]] configurations, heavily copied from [[https://github.com/jwiegley/nix-config][jwiegley's nix-configs]]  
