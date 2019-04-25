@@ -41,7 +41,7 @@ in rec {
   programs = {
     home-manager = {
       enable = true;
-      path = "https://github.com/rycee/home-manager/archive/master.tar.gz";
+      path = "${home_directory}/Developer/src/personal/nix-config/home-manager";
     };
 
     direnv = {
