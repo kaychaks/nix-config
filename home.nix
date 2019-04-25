@@ -83,8 +83,6 @@ in rec {
       };
 
       shellAliases = {
-        setup-proxies = "$HOME/Developer/scripts/setup-proxies.sh && source ~/.zshrc";
-        remove-proxies = "$HOME/Developer/scripts/remove-proxies.sh && source ~/.zshrc";
         cdp = "cd ~/Developer/src/personal/";
         cdw = "cd ~/Developer/src/work/";
         l = "ls -lah";
