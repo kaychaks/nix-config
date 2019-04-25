@@ -1,0 +1,4 @@
+#!/bin/bash
+
+ls $TMPDIR/emacs$UID | grep -q server || exec "$HOME/Applications/Nix Apps/Emacs.app/Contents/MacOS/Emacs" --daemon
+exec emacsclient -qc "$@"

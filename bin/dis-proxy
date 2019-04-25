@@ -1,0 +1,4 @@
+#!/bin/bash
+
+sed -i '' 's/proxy={enable=[^;]*/proxy={enable=false/' $HOME/.local/share/localconfig/default.nix
+home-switch

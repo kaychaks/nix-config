@@ -1,5 +1,14 @@
 { config, lib, pkgs, ... }:
 
+let
+
+  user = "kaushik";
+  home_directory = "/Users/${user}";
+  xdg_configHome = "${home_directory}/.config";
+  log_directory = "${home_directory}/Library/Logs";
+  tmp_directory = "/tmp";
+
+in
 {
 
   nixpkgs = {
@@ -9,99 +18,60 @@
       allowUnsupportedSystem = false;
     };
 
-    overlays = [ (import ./config/emacs-config.nix) ];
+    overlays = [
+      (import ./overlays/00-home-manager.nix)
+      (import ./overlays/01-nix-scripts.nix)
+      (import ./overlays/10-emacs.nix)
+    ];
   };
 
   environment = {
-    systemPackages =
-      let packages = {pkgs}:
-        with pkgs;
-        [
-          coreutils
-
-          # shells
-          zsh
-          tmux
-
-          # tools
-          direnv
-          git
-          jq
-          vim
-          emacs26
-
-          # system
-          htop
-          fzf
-          less
-          nix-bash-completions
-          nix-zsh-completions
-          time
-          tree
-          unrar
-          unzip
-          ripgrep
-          gnutar
-
-          # networking
-          openssl
-          youtube-dl
-          ffmpeg
-          pandoc
-          curl
-          wget
-          rsync
-
-          # x11
-          xquartz
-
-
-          # from brew
-          libedit
-          libunwind
-          libyaml
-          libossp_uuid
-          pkg-config
-          unixODBC
-          zlib
-          gmp
-
-
-          # dev
-          julia
-        ];
-      in
-      packages { inherit pkgs; };
+    systemPackages = import ./config/packages.nix { inherit pkgs; };
 
     variables = {
       LC_CTYPE = "en_US.UTF-8";
       TERM = "xterm-256color";
       LANG = "en_US.UTF-8";
+      VISUAL = "emacsclient";
+      HOME_MANAGER_CONFIG = "${home_directory}/Developer/src/personal/nix-config/home.nix";
+      MANPATH = [
+        "${home_directory}/.nix-profile/share/man"
+        "${home_directory}/.nix-profile/man"
+        "${config.system.path}/share/man"
+        "${config.system.path}/man"
+        "/usr/local/share/man"
+        "/usr/share/man"
+        "/Developer/usr/share/man"
+        "/usr/X11/man"
+      ];
     };
 
-    shellAliases = {
-      setup-proxies = "$HOME/Developer/scripts/setup-proxies.sh && source ~/.zshrc";
-      remove-proxies = "$HOME/Developer/scripts/remove-proxies.sh && source ~/.zshrc";
-      Emacs = "/run/current-system/Applications/Emacs.app/Contents/MacOS/Emacs --daemon";
-      ec = "nohup emacsclient -nqc \"$@\" &> /dev/null";
-      cdp = "cd ~/Developer/src/personal/";
-      cdw = "cd ~/Developer/src/work/";
-      l = "ls -lah";
-      ll = "ls -lh";
-      la = "ls -lAh";
-      d = "dirs -v | head -10";
-    };
+
+    pathsToLink = [ "/info" "/etc" "/share" "/include" "/lib" "/libexec" ];
   };
 
-  # Use a custom configuration.nix location.
-  # $ darwin-rebuild switch -I darwin-config=$HOME/.config/nixpkgs/darwin/configuration.nix
-  # environment.darwinConfig = "$HOME/.config/nixpkgs/darwin/configuration.nix";
+  services.activate-system.enable = true;
 
-  # Auto upgrade nix package and the daemon service.
-  # services.nix-daemon.enable = true;
-  # nix.package = pkgs.nix;
   nix = {
     package = pkgs.nix;
+
+    useSandbox = false;
+    sandboxPaths = [
+      "/System/Library/Frameworks"
+      "/System/Library/PrivateFrameworks"
+      "/usr/lib"
+      "/private/tmp"
+      "/private/var/tmp"
+      "/usr/bin/env"
+    ];
+
+    nixPath = [
+      "darwin-config=$HOME/Developer/src/personal/nix-config/darwin.nix"
+      "ssh-config-file=$HOME/.ssh/config"
+      "/nix/var/nix/profiles/per-user/${user}/channels"
+      "$HOME/.nix-defexpr/channels"
+    ];
+
     maxJobs = 8;
     buildCores = 4;
     distributedBuilds = true;
@@ -119,33 +89,7 @@
     enableFzfCompletion = true;
     enableFzfGit = true;
     enableFzfHistory = true;
-    promptInit = ''
-      autoload -U promptinit && promptinit
-      setopt PROMPTSUBST
-      _prompt_nix() {
-      [ -z "$IN_NIX_SHELL" ] || echo "%F{yellow}%B[''${name:+$name}λ]%b%f "
-      }
-      PS1='%F{blue}λ%f '
-      RPS1='$(_prompt_nix)%F{green}%~%f'
-    '';
-    loginShellInit = ''
-      take() {
-        mkdir -p $@ && cd ''${@:$#}
-      }
-    '';
-    interactiveShellInit = ''
-      setopt AUTOCD AUTOPUSHD
-      autoload -U down-line-or-beginning-search
-      autoload -U up-line-or-beginning-search
-      bindkey '^[[A' down-line-or-beginning-search
-      bindkey '^[[A' up-line-or-beginning-search
-      zle -N down-line-or-beginning-search
-      zle -N up-line-or-beginning-search
-    '';
   };
 
-  # Used for backwards compatibility, please read the changelog before changing.
-  # $ darwin-rebuild changelog
   system.stateVersion = 3;
-
 }

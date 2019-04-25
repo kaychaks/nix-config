@@ -1,0 +1,2 @@
+#!/bin/bash -e
+home-manager -I "localconfig=$HOME/.local/share/localconfig" switch
