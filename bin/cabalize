@@ -28,14 +28,28 @@ cat > shell.nix <<EOF
     haskellPackages = pkgs.haskell.packages.\${compiler};
     project = import ./. { inherit nixpkgs compiler; };
     in
-    haskellPackages.shellFor {
+    with haskellPackages;
+    shellFor {
       inherit withHoogle;
       packages = p: [ project.$PKGNAME ];
-      buildInputs = [ haskellPackages.ghcid haskellPackages.cabal-install ];
+      buildInputs = [
+                  ghcid
+                  cabal-install
+                  hlint
+                  hoogle
+                  fast-tags
+                  pointfree
+                  hindent
+                  stylish-haskell
+      ];
     }
 EOF
 
-nix-shell --command "cabal clean"
+nix-shell --command "cabal new-clean"
 nix-shell --command "cabal new-configure $@"
+
+cat > cabal.project << EOF
+    packages : .
+EOF
 
 

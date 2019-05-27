@@ -20,6 +20,7 @@ in
   aspellDicts.en
   vim
   emacs26
+  texlive.combined.scheme-full
 
   # system
   htop
@@ -33,6 +34,8 @@ in
   unzip
   ripgrep
   gnutar
+  watchman
+  nix-prefetch-git
 
   # networking
   openssl
@@ -62,16 +65,7 @@ in
 
   # dev
   julia
-  haskell.packages.ghc844.Agda
+  haskellPackages.Agda
   lean
 
-  # haskell
-  (exe haskellPackages.cabal-install)
-  (exe haskellPackages.cabal2nix)
-  (exe haskellPackages.fast-tags)
-  (exe haskellPackages.ghcid)
-  (exe haskellPackages.hlint)
-  (exe haskellPackages.hoogle)
-  (exe haskellPackages.pointfree)
-  (exe haskellPackages.stylish-haskell)
 ]

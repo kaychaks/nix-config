@@ -35,6 +35,8 @@ in rec {
         insecure
         proxy-insecure
        '';
+      ".spacemacs".source = ./dot-emacs/spacemacs;	
+      "${xdg.dataHome}/spacemacs/private".source = ./dot-emacs/spacemacs-private;
     };
   };
 
@@ -135,6 +137,47 @@ in rec {
       '';
 
       initExtra = ''
+        export PATH=$PATH:/usr/local/bin:/usr/local/sbin
+
+        take() {
+          mkdir -p $@ && cd ''${@:$#}
+        }
+        :d() {
+          eval "$(direnv hook zsh)"
+        }
+        :r() {
+          rm -f .direnv/dump-* && direnv reload
+        }
+        :s() {
+          source ${xdg.configHome}/zsh/.zprofile
+          source ${xdg.configHome}/zsh/.zshrc
+        }
+        :proxy() {
+          ${if localconfig.proxy.enable then
+              ''
+                export HTTP_PROXY=${localconfig.proxy.pass}
+                export HTTPS_PROXY=${localconfig.proxy.pass}
+                export http_proxy=${localconfig.proxy.pass}
+                export https_proxy=${localconfig.proxy.pass}
+              ''
+            else
+              ''
+                unset HTTP_PROXY
+                unset HTTPS_PROXY
+                unset http_proxy
+                unset https_proxy
+              ''
+            }
+        }
+        :en-proxy() {
+        sed -i ''' 's/proxy={enable=[^;]*/proxy={enable=true/' ${xdg.dataHome}/localconfig/default.nix
+          home-switch
+        }
+        :dis-proxy() {
+        sed -i ''' 's/proxy={enable=[^;]*/proxy={enable=false/' ${xdg.dataHome}/localconfig/default.nix
+          home-switch
+        } 
+
         autoload -U promptinit && promptinit
         setopt PROMPTSUBST
         _prompt_nix() {
@@ -142,7 +185,6 @@ in rec {
         }
         PS1='%F{blue}λ%f '
         RPS1='$(_prompt_nix)%F{green}%~%f'
-
 
         setopt AUTOCD AUTOPUSHD
         autoload -U down-line-or-beginning-search
@@ -198,7 +240,7 @@ in rec {
       bind S choose-session
 
       # bind key to update tmux config
-      bind-key R source-file ${home_directory}/.tmux.conf ; source-file ${xdg.configHome}/zsh/.zshrc ; display-message "tmux REFRESHED!!"
+      bind-key R source-file ${home_directory}/.tmux.conf ; display-message "tmux REFRESHED!!"
 
       # y and p as in vim
       bind Escape copy-mode

@@ -76,6 +76,14 @@ in
     buildCores = 4;
     distributedBuilds = true;
 
+    ## Obelisk
+    binaryCaches = [
+      "https://nixcache.reflex-frp.org"
+    ];
+
+    binaryCachePublicKeys = [
+      "ryantrinkle.com-1:JJiAKaRv9mWgpVAz8dwewnZe0AzzEAzPkagE9SP5NWI="
+    ];
   };
 
   programs.bash = {
