@@ -22,6 +22,7 @@ in
       (import ./overlays/00-home-manager.nix)
       (import ./overlays/01-nix-scripts.nix)
       (import ./overlays/10-emacs.nix)
+      (import ./overlays/20-lorri.nix)
     ];
   };
 

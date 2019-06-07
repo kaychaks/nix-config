@@ -14,6 +14,7 @@ in
 
   # tools
   direnv
+  lorri
   git
   jq
   aspell

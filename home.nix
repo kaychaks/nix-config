@@ -13,6 +13,8 @@ let
   fzf_g = "https://raw.githubusercontent.com/LnL7/nix-darwin/master/modules/programs/zsh/fzf-git.zsh";
   fzf_h = "https://raw.githubusercontent.com/LnL7/nix-darwin/master/modules/programs/zsh/fzf-history.zsh";
 
+  revealjs_source = "https://github.com/hakimel/reveal.js/archive/3.8.0.tar.gz";
+
 in rec {
   nixpkgs = {
     config = {
@@ -35,8 +37,12 @@ in rec {
         insecure
         proxy-insecure
        '';
-      ".spacemacs".source = ./dot-emacs/spacemacs;	
+
+       ".spacemacs".source = ./dot-emacs/spacemacs;
+
       "${xdg.dataHome}/spacemacs/private".source = ./dot-emacs/spacemacs-private;
+
+      "${xdg.dataHome}/revealjs".source = pkgs.fetchzip {url = "${revealjs_source}" ; sha256 = "14cva2hxdv4gxpz2a996qs8xhxffw97a90gkz2mmgdczh1kyn1sc"; };
     };
   };
 
