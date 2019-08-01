@@ -43,6 +43,10 @@ in rec {
       "${xdg.dataHome}/spacemacs/private".source = ./dot-emacs/spacemacs-private;
 
       "${xdg.dataHome}/revealjs".source = pkgs.fetchzip {url = "${revealjs_source}" ; sha256 = "14cva2hxdv4gxpz2a996qs8xhxffw97a90gkz2mmgdczh1kyn1sc"; };
+
+      "${xdg.configHome}/nixpkgs/config.nix".text = ''
+        { allowBroken = true; }
+      '';
     };
   };
 

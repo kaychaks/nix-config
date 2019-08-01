@@ -23,6 +23,7 @@ in
       (import ./overlays/01-nix-scripts.nix)
       (import ./overlays/10-emacs.nix)
       (import ./overlays/20-lorri.nix)
+      (import ./overlays/30-apps.nix)
     ];
   };
 

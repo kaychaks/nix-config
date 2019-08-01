@@ -14,7 +14,7 @@ in
 
   # tools
   direnv
-  lorri
+  # lorri
   git
   jq
   aspell
@@ -22,6 +22,8 @@ in
   vim
   emacs26
   texlive.combined.scheme-full
+  VSCode
+  # Alfred
 
   # system
   htop
@@ -68,5 +70,15 @@ in
   julia
   haskellPackages.Agda
   lean
+  sbt-extras
+  jdk
 
+  (exe haskellPackages.cabal-install)
+  (exe haskellPackages.cabal2nix)
+  (exe haskellPackages.fast-tags)
+  (exe haskellPackages.ghcid)
+  (exe haskellPackages.hlint)
+  (exe haskellPackages.hoogle)
+  (exe haskellPackages.pointfree)
+  (exe haskellPackages.stylish-haskell)
 ]
