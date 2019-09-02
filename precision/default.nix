@@ -1,0 +1,249 @@
+# Edit this configuration file to define what should be installed on
+# your system.  Help is available in the configuration.nix(5) man page
+# and in the NixOS manual (accessible by running ‘nixos-help’).
+
+{ config, pkgs, ... }:
+
+{
+  imports =
+    [ # Include the results of the hardware scan.
+      ./hardware-configuration.nix
+    ];
+
+
+  boot = {
+      # Use the systemd-boot EFI boot loader.
+      loader = {
+        systemd-boot.enable = true;
+        efi.canTouchEfiVariables = true;
+      };
+
+      # Use kernel >5.1
+      kernelPackages = pkgs.linuxPackages_latest;
+
+      # Swapping Cmd and Alt keys of Apple Keyboard
+      kernelParams = [
+        "hid_apple.swap_opt_cmd=1"
+        "hid_apple.fnmode=2"
+        "hid_magicmouse.emulate_3button=N"
+        "hid_magicmouse.scroll_speed=60"
+      ];
+  };
+
+  powerManagement.powertop.enable = true;
+
+  networking = {
+    hostName = "tardis"; 
+  };
+
+
+  nix = {
+    nixPath =
+      [ "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos/nixpkgs"
+        "nixos-config=/etc/nixos/configuration.nix"
+        "/nix/var/nix/profiles/per-user/root/channels"
+      ];
+    binaryCaches = [
+      "https://cache.nixos.org/"
+      "https://cachix.cachix.org"
+      "https://nixcache.reflex-frp.org"
+      "https://hydra.iohk.io"
+      "http://hydra.qfpl.io"
+    ];
+    binaryCachePublicKeys = [
+      "ryantrinkle.com-1:JJiAKaRv9mWgpVAz8dwewnZe0AzzEAzPkagE9SP5NWI="
+      "qfpl.io:xME0cdnyFcOlMD1nwmn6VrkkGgDNLLpMXoMYl58bz5g="
+      "cachix.cachix.org-1:eWNHQldwUO7G2VkjpnjDbWwy4KQ/HNxht7H4SSoMckM="
+      "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+    ]; 
+#    trustedUsers = [ "root" "kaushik" ];
+  };
+
+  nixpkgs = {
+    config.allowUnfree = true;
+  };
+  
+  time = {
+    timeZone = "Asia/Kolkata";
+  };
+
+  hardware = {
+    pulseaudio = {
+      enable = true;
+      package = pkgs.pulseaudioFull;
+    };
+    bluetooth = {
+      enable = true;
+      package = pkgs.bluezFull;
+    };
+  };
+
+  i18n = {
+    consoleFont = "SF Mono";
+    consoleKeyMap = "us";
+    defaultLocale = "en_US.UTF-8";
+  };
+
+  fonts = {
+    enableFontDir = true;
+    fonts = with pkgs; [
+      fira-code
+      font-awesome_5
+      liberation_ttf
+      ubuntu_font_family
+      powerline-fonts
+      vegur
+    ];
+    fontconfig = {
+      ultimate.preset = "osx";
+      hinting.enable = false;
+      defaultFonts = {
+        monospace = [ "SF Mono" "Fira Code" "Ubuntu Mono"];
+        sansSerif = [ "SF Display" "Liberation Sans" "Arial" "Ubuntu" ];
+        serif = [ "New York" "Liberation Serif" "Times New Roman" ];
+      };
+    };
+  };
+
+
+
+
+  services = {
+    printing.enable = true;
+    upower.enable = true;
+    openssh.enable = true;
+    devmon.enable = true;
+    dbus.packages = [ pkgs.blueman ];
+    
+    xserver = {
+      enable = true;
+      layout = "us";
+      exportConfiguration = true;
+
+      # GPU
+      #videoDrivers = [ "amdgpu-pro" ];
+
+      # DPI
+      monitorSection = ''
+        DisplaySize 406 228
+      '';
+      
+      # Enable touchpad support.
+      libinput = {
+        enable = true;
+        naturalScrolling = false;
+        disableWhileTyping = true;
+        tapping = false;
+      };
+
+      
+      # Enable the GNome Desktop Environment
+      desktopManager = {
+        gnome3.enable = true;
+        xterm.enable = false;
+      };
+
+      displayManager = {
+        gdm.enable = true;
+
+        # only way to encode settings in gnome3, weird
+        sessionCommands = ''
+          dconf write /org/gnome/desktop/peripherals/keyboard/repeat-interval 'uint32 20'
+          dconf write /org/gnome/desktop/peripherals/keyboard/delay 'uint32 300'
+
+          dconf write /org/gnome/desktop/peripherals/touchpad/natural-scroll false
+
+          dconf write /org/gtk/settings/file-chooser/clock-format "'24h'"
+
+          dconf write /org/gnome/desktop/interface/gtk-key-theme "'Emacs'"
+          dconf write /org/gnome/desktop/interface/gtk-theme "'Adwaita-dark'"
+
+          dconf write /org/gnome/desktop/interface/monospace-font-name "'SF Mono 13'"
+          dconf write /org/gnome/desktop/interface/font-name "'SF Pro Display 13'"
+          dconf write /org/gnome/desktop/interface/document-font-name "'SF Pro Display Medium 13'"
+          dconf write /org/gnome/desktop/wm/preferences/titlebar-font "'SF Pro Display Bold 13'"
+          dconf write /org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/font "'SF Mono 14'"
+          dconf write /org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/audible-bell false
+
+          dconf write /org/gnome/desktop/input-sources/xkb-options  "['rupeesign:4', 'ctrl:nocaps', 'ctrl:swap_lalt_lctl_lwin']"
+
+
+          dconf write /org/gnome/desktop/wm/keybindings/switch-applications "['<Primary>Tab', '<Alt>Tab', '<Primary>Space']"
+          dconf write /org/gnome/desktop/wm/keybindings/switch-applications-backward "['<Primary><Shift>Tab', '<Alt><Shift>Tab', '<Primary><Shift>Space']"
+          dconf write /org/gnome/settings-daemon/plugins/media-keys/search "'<Alt>space'"
+          dconf write /org/gnome/desktop/wm/keybindings/switch-group "['<Primary>grave']"
+          dconf write /org/gnome/desktop/wm/keybindings/switch-group-backward "['<Primary><Shift>grave']"
+          dconf write /org/gnome/desktop/wm/keybindings/close "['<Alt>F4', '<Primary>q']"
+
+          dconf write /org/gnome/desktop/privacy/disable-camera true
+          dconf write /org/gnome/desktop/privacy/disable-microphone true
+          dconf write /org/gnome/desktop/privacy/remove-old-temp-files true
+          dconf write /org/gnome/desktop/privacy/remove-old-trash-files true
+        '';
+
+
+        # these settings don't work in gnome3 !!
+        # autoRepeatInterval = 50;
+        # autoRepeatDelay = 250;
+        # xkbOptions = "ctrl:nocaps,eurosign:e,ctrl:swap_lalt_lctl_lwin";
+      };
+    };
+  };
+  
+
+
+  environment = {
+    variables = {
+      LC_CTYPE = "en_US.UTF-8";
+      TERM = "xterm-256color";
+      LANG = "en_US.UTF-8";
+      VISUAL = "vim";
+    };
+    systemPackages = with pkgs; [
+     aspell
+     aspellDicts.en
+      blueman
+      curl
+      gnumake
+      gparted
+      htop
+      manpages
+      nmap
+      openssl
+      traceroute
+      tree
+      unzip
+      wget
+      which
+      zlib
+      vim
+      zip
+      firefox
+      git
+    ];
+
+#    pathsToLink = [ "/info" "/etc" "/share" "/include" "/lib" "/libexec" ]; 
+  };
+
+  programs = {
+    zsh = {
+      enable = true;
+    };
+  };
+
+  users.users.kaushik = {
+     isNormalUser = true;
+     shell = pkgs.zsh;
+     uid = 1000;
+     initialHashedPassword = "";
+     extraGroups = [ "wheel" "networkmanager" "video" "audio" "disk" ];
+  };
+
+
+  # This value determines the NixOS release with which your system is to be
+  # compatible, in order to avoid breaking some software such as database
+  # servers. You should change this only after NixOS release notes say you
+  # should.
+  system.stateVersion = "19.03"; # Did you read the comment?
+}
+
