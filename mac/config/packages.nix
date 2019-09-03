@@ -73,6 +73,10 @@ in
   sbt-extras
   jdk
 
+  nodejs_latest
+  nodePackages.node2nix
+  nodePackages.eslint
+
   (exe haskellPackages.cabal-install)
   (exe haskellPackages.cabal2nix)
   (exe haskellPackages.fast-tags)
