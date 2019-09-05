@@ -50,6 +50,10 @@ rec {
 
     packages = with pkgs; [
       pandoc
+
+      fractal ## matrix client
+
+      ## TODO: list of gnome extensions
     ];
   };
 
