@@ -26,7 +26,7 @@
         "hid_apple.swap_opt_cmd=1"
         "hid_apple.fnmode=2"
         "hid_magicmouse.emulate_3button=N"
-        "hid_magicmouse.scroll_speed=60"
+        "hid_magicmouse.scroll_speed=55"
       ];
   };
 
@@ -62,7 +62,7 @@
   nixpkgs = {
     config.allowUnfree = true;
   };
-  
+
   time = {
     timeZone = "Asia/Kolkata";
   };
