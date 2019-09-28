@@ -3,7 +3,8 @@
 let
   user = "kaushik";
   home_dir = "/home/${user}";
-  nix_config_dir = "${home_dir}/src/nix-config";
+  nix_config_dir = "${home_dir}/src/ops/nix-config";
+  all-hies = import (fetchTarball "https://github.com/infinisil/all-hies/tarball/master") {};
 
   lib = pkgs.stdenv.lib;
 in
@@ -18,6 +19,8 @@ rec {
     overlays = [
 #      (import "${nix_config_dir}/overlays/10-emacs.nix")
       (import "${nix_config_dir}/overlays/11-spacemacs")
+      (import "${nix_config_dir}/overlays/30-thunderbird.nix")
+      (import "${nix_config_dir}/overlays/31-zulip.nix")
     ];
   };
 
@@ -27,7 +30,6 @@ rec {
     dataHome = "${home_dir}/.local/share";
     cacheHome = "${home_dir}/.cache";
   };
-
 
   home = {
     sessionVariables = {
@@ -51,15 +53,25 @@ rec {
     packages = with pkgs; [
       pandoc
 
-      fractal ## matrix client
+      riot-desktop ## matrix client
+      signal-desktop
+      # zulip
+
+      # keybase-gui
+      zotero
+      thunderbird-beta
+
+
+      (all-hies.selection { selector = p: { inherit (p) ghc864 ghc865 ghc843 ; }; })
 
       ## TODO: list of gnome extensions
     ];
   };
 
   services = {
-    keybase.enable = true;
-    kbfs.enable = true;
+    # keybase.enable = true;
+    # kbfs.enable = true;
+    # kbfs.mountPoint = "/keybase";
     gpg-agent = {
       enable = true;
       enableSshSupport = true;
@@ -101,7 +113,12 @@ rec {
     };
 
 
-    firefox.enable = true;
+    firefox = {
+      enable = true;
+    };
+    chromium = {
+      enable = true;
+    };
 
     bash = {
       enable = true;
@@ -249,6 +266,17 @@ rec {
         zle -N up-line-or-beginning-search
 
         source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+        # TMUX
+        if which tmux >/dev/null 2>&1; then
+          # if no session is started, start a new session
+          test -z $TMUX && tmux
+
+          # when quitting tmux, try to attach
+          while test -z $TMUX; do
+            tmux attach || break
+          done
+        fi
 
         # Read system-wide modifications.
         if test -f /etc/zshrc.local; then

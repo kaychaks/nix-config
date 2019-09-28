@@ -18,6 +18,9 @@
         efi.canTouchEfiVariables = true;
       };
 
+      # linux v5.3 is not yet supported by stable zfs
+      zfs.enableUnstable = true;
+
       # Use kernel >5.1
       kernelPackages = pkgs.linuxPackages_latest;
 
@@ -33,7 +36,7 @@
   powerManagement.powertop.enable = true;
 
   networking = {
-    hostName = "tardis"; 
+    hostName = "tardis";
   };
 
 
@@ -49,14 +52,18 @@
       "https://nixcache.reflex-frp.org"
       "https://hydra.iohk.io"
       "http://hydra.qfpl.io"
+      "https://qfpl.cachix.org"
+      "https://hie-nix.cachix.org"
     ];
     binaryCachePublicKeys = [
       "ryantrinkle.com-1:JJiAKaRv9mWgpVAz8dwewnZe0AzzEAzPkagE9SP5NWI="
       "qfpl.io:xME0cdnyFcOlMD1nwmn6VrkkGgDNLLpMXoMYl58bz5g="
       "cachix.cachix.org-1:eWNHQldwUO7G2VkjpnjDbWwy4KQ/HNxht7H4SSoMckM="
       "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-    ]; 
-#    trustedUsers = [ "root" "kaushik" ];
+      "qfpl.cachix.org-1:JTTxGW07zLPAGglHlMbMC3kQpCd6eFRgbtnuorCogYw="
+      "hie-nix.cachix.org-1:EjBSHzF6VmDnzqlldGXbi0RM3HdjfTU3yDRi9Pd0jTY="
+    ];
+    trustedUsers = [ "root" "kaushik" ];
   };
 
   nixpkgs = {
@@ -76,6 +83,10 @@
       enable = true;
       package = pkgs.bluezFull;
     };
+  };
+
+  virtualisation.docker = {
+    enable = true;
   };
 
   i18n = {
@@ -109,12 +120,22 @@
 
 
   services = {
-    printing.enable = true;
+    printing = {
+      enable = true;
+      drivers = [ pkgs.hplip ];
+    };
     upower.enable = true;
     openssh.enable = true;
     devmon.enable = true;
     dbus.packages = [ pkgs.blueman ];
-    
+
+    keybase.enable = true;
+
+    kbfs = {
+      enable = true;
+      mountPoint = "%h/.config/keybase/kbfs";
+    };
+
     xserver = {
       enable = true;
       layout = "us";
@@ -127,7 +148,7 @@
       monitorSection = ''
         DisplaySize 406 228
       '';
-      
+
       # Enable touchpad support.
       libinput = {
         enable = true;
@@ -136,7 +157,7 @@
         tapping = false;
       };
 
-      
+
       # Enable the GNome Desktop Environment
       desktopManager = {
         gnome3.enable = true;
@@ -189,8 +210,6 @@
       };
     };
   };
-  
-
 
   environment = {
     variables = {
@@ -200,8 +219,8 @@
       VISUAL = "vim";
     };
     systemPackages = with pkgs; [
-     aspell
-     aspellDicts.en
+      aspell
+      aspellDicts.en
       blueman
       curl
       gnumake
@@ -216,13 +235,14 @@
       wget
       which
       zlib
-      vim
       zip
-      firefox
-      git
-    ];
 
-#    pathsToLink = [ "/info" "/etc" "/share" "/include" "/lib" "/libexec" ]; 
+      keybase-gui
+
+      # vim
+      # firefox
+      # git
+    ];
   };
 
   programs = {
@@ -240,10 +260,7 @@
   };
 
 
-  # This value determines the NixOS release with which your system is to be
-  # compatible, in order to avoid breaking some software such as database
-  # servers. You should change this only after NixOS release notes say you
-  # should.
-  system.stateVersion = "19.03"; # Did you read the comment?
+  system.stateVersion = "19.03";
+  system.autoUpgrade.enable = true;
 }
 
