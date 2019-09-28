@@ -19,11 +19,11 @@ in
     };
 
     overlays = [
-      (import ./overlays/00-home-manager.nix)
-      (import ./overlays/01-nix-scripts.nix)
-      (import ./overlays/10-emacs.nix)
-      (import ./overlays/20-lorri.nix)
-      (import ./overlays/30-apps.nix)
+      (import ../overlays/00-home-manager.nix)
+      (import ../overlays/01-nix-scripts.nix)
+      (import ../overlays/10-emacs.nix)
+      (import ../overlays/20-lorri.nix)
+      (import ../overlays/30-apps.nix)
     ];
   };
 
@@ -35,7 +35,7 @@ in
       TERM = "xterm-256color";
       LANG = "en_US.UTF-8";
       VISUAL = "emacsclient";
-      HOME_MANAGER_CONFIG = "${home_directory}/Developer/src/personal/nix-config/home.nix";
+      HOME_MANAGER_CONFIG = "${home_directory}/Developer/src/personal/nix-config/mac/home.nix";
       MANPATH = [
         "${home_directory}/.nix-profile/share/man"
         "${home_directory}/.nix-profile/man"
@@ -68,7 +68,7 @@ in
     ];
 
     nixPath = [
-      "darwin-config=$HOME/Developer/src/personal/nix-config/darwin.nix"
+      "darwin-config=$HOME/Developer/src/personal/nix-config/mac/darwin.nix"
       "ssh-config-file=$HOME/.ssh/config"
       "/nix/var/nix/profiles/per-user/${user}/channels"
       "$HOME/.nix-defexpr/channels"
