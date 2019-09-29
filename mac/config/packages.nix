@@ -67,9 +67,9 @@ in
 
 
   # dev
-  julia
-  haskellPackages.Agda
-  lean
+  # julia
+  # haskellPackages.Agda
+  # lean
   sbt-extras
   jdk
 
@@ -77,12 +77,12 @@ in
   nodePackages.node2nix
   nodePackages.eslint
 
-  (exe haskellPackages.cabal-install)
-  (exe haskellPackages.cabal2nix)
-  (exe haskellPackages.fast-tags)
-  (exe haskellPackages.ghcid)
-  (exe haskellPackages.hlint)
-  (exe haskellPackages.hoogle)
-  (exe haskellPackages.pointfree)
-  (exe haskellPackages.stylish-haskell)
+  # (exe haskellPackages.cabal-install)
+  # (exe haskellPackages.cabal2nix)
+  # (exe haskellPackages.fast-tags)
+  # (exe haskellPackages.ghcid)
+  # (exe haskellPackages.hlint)
+  # (exe haskellPackages.hoogle)
+  # (exe haskellPackages.pointfree)
+  # (exe haskellPackages.stylish-haskell)
 ]

@@ -29,6 +29,7 @@ in
 
   environment = {
     systemPackages = import ./config/packages.nix { inherit pkgs; };
+    darwinConfig = "/Users/kaushik/Developer/src/personal/nix-config/mac/darwin.nix";
 
     variables = {
       LC_CTYPE = "en_US.UTF-8";
