@@ -31,6 +31,8 @@
         "hid_magicmouse.emulate_3button=N"
         "hid_magicmouse.scroll_speed=55"
       ];
+
+      earlyVconsoleSetup = true;
   };
 
   powerManagement.powertop.enable = true;
@@ -41,6 +43,7 @@
 
 
   nix = {
+    autoOptimiseStore = true;
     nixPath =
       [ "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos/nixpkgs"
         "nixos-config=/etc/nixos/configuration.nix"
@@ -90,7 +93,7 @@
   };
 
   i18n = {
-    consoleFont = "SF Mono";
+    consoleFont = "latarcyrheb-sun32";
     consoleKeyMap = "us";
     defaultLocale = "en_US.UTF-8";
   };
@@ -161,7 +164,7 @@
       # Enable the GNome Desktop Environment
       desktopManager = {
         gnome3.enable = true;
-        xterm.enable = false;
+        xterm.enable = true;
       };
 
       displayManager = {
@@ -209,12 +212,14 @@
         # xkbOptions = "ctrl:nocaps,eurosign:e,ctrl:swap_lalt_lctl_lwin";
       };
     };
+
+    zerotierone.enable = true;
   };
 
   environment = {
     variables = {
       LC_CTYPE = "en_US.UTF-8";
-      TERM = "xterm-256color";
+      TERM = "tmux-256color";
       LANG = "en_US.UTF-8";
       VISUAL = "vim";
     };
@@ -246,6 +251,7 @@
   };
 
   programs = {
+    dconf.enable = true;
     zsh = {
       enable = true;
     };
@@ -260,7 +266,7 @@
   };
 
 
-  system.stateVersion = "19.03";
+  system.stateVersion = "19.09";
   system.autoUpgrade.enable = true;
 }
 

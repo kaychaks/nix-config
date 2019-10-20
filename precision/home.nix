@@ -29,6 +29,7 @@ rec {
     enable = true;
     dataHome = "${home_dir}/.local/share";
     cacheHome = "${home_dir}/.cache";
+    configHome = "${home_dir}/.config";
   };
 
   home = {
@@ -36,6 +37,9 @@ rec {
       EDITOR = "vim";
       VISUAL = "vim";
       BROWSER = "firefox";
+      LC_CTYPE = "en_US.UTF-8";
+      TERM = "tmux-256color";
+      LANG = "en_US.UTF-8";
     };
 
     file = {
@@ -56,11 +60,12 @@ rec {
       riot-desktop ## matrix client
       signal-desktop
       # zulip
+      discord
+      hexchat
 
       # keybase-gui
       zotero
       thunderbird-beta
-
 
       (all-hies.selection { selector = p: { inherit (p) ghc864 ghc865 ghc843 ; }; })
 
@@ -89,6 +94,15 @@ rec {
       extraPackages = epkgs: with epkgs; [pdf-tools];
     };
 
+    urxvt = {
+      enable = true;
+    };
+
+    termite = {
+      enable = true;
+      font = "SF Mono 12";
+    };
+
     direnv = {
       enable = true;
       enableBashIntegration = true;
@@ -99,7 +113,6 @@ rec {
       enable = true;
       enableZshIntegration = true;
     };
-
 
     vim = {
       enable = true;
@@ -208,8 +221,16 @@ rec {
       enable = true;
       forwardAgent = true;
       serverAliveInterval = 60;
-
       hashKnownHosts = true;
+
+      matchBlocks = {
+          kutir = {
+            hostname = "139.59.56.101";
+            user = "kaushikc";
+            identityFile = "/home/kaushik/Documents/keys/do-nixos";
+            identitiesOnly = true;
+          };
+      };
     };
 
     zsh = {
@@ -226,7 +247,7 @@ rec {
         ALTERNATE_EDITOR  = "vim";
         EDITOR            = "vim";
         LC_CTYPE = "en_US.UTF-8";
-        TERM = "xterm-256color";
+        TERM = "tmux-256color";
         LANG = "en_US.UTF-8";
         VISUAL = "vim";
       };
