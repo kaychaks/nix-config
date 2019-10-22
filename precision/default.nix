@@ -44,6 +44,8 @@
 
   nix = {
     autoOptimiseStore = true;
+    extraOptions = "binary-caches-parallel-connections = 5";
+
     nixPath =
       [ "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos/nixpkgs"
         "nixos-config=/etc/nixos/configuration.nix"
