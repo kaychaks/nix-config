@@ -52,6 +52,7 @@ rec {
         source = "${nix_config_dir}/dot-emacs/spacemacs-private";
         recursive = true;
       };
+      ".xmonad/xmonad.hs".source = "${nix_config_dir}/precision/configFiles/xmonad/xmonad.hs";
     };
 
     packages = with pkgs; [
@@ -81,6 +82,10 @@ rec {
       enable = true;
       enableSshSupport = true;
     };
+
+    taffybar = {
+      enable = true;
+    };
   };
 
   programs = {
@@ -94,12 +99,54 @@ rec {
       extraPackages = epkgs: with epkgs; [pdf-tools];
     };
 
-    urxvt = {
-      enable = true;
-    };
-
     termite = {
       enable = true;
+      allowBold = true;
+      backgroundColor = "rgba(0, 43, 54)";
+      clickableUrl = true;
+      foregroundColor = "#93a1a1";
+      foregroundBoldColor = "#eee8d5";
+      cursorColor = "#eee8d5";
+      cursorForegroundColor = "#002b36";
+      colorsExtra = ''
+        # Black, Gray, Silver, White
+        color0  = #002b36
+        color8  = #657b83
+        color7  = #93a1a1
+        color15 = #fdf6e3
+
+        # Red
+        color1  = #dc322f
+        color9  = #dc322f
+
+        # Green
+        color2  = #859900
+        color10 = #859900
+
+        # Yellow
+        color3  = #b58900
+        color11 = #b58900
+
+        # Blue
+        color4  = #268bd2
+        color12 = #268bd2
+
+        # Purple
+        color5  = #6c71c4
+        color13 = #6c71c4
+
+        # Teal
+        color6  = #2aa198
+        color14 = #2aa198
+
+        # Extra colors
+        color16 = #cb4b16
+        color17 = #d33682
+        color18 = #073642
+        color19 = #586e75
+        color20 = #839496
+        color21 = #eee8d5
+      '';
       font = "SF Mono 12";
     };
 
@@ -437,7 +484,22 @@ rec {
 
 
   # xserver options
-  #xsession = {
-  #  enable = true;
-  #};
+  xsession = {
+   enable = true;
+   windowManager.xmonad = {
+     enable = true;
+     enableContribAndExtras = true;
+     extraPackages = (haskellPackages: [haskellPackages.taffybar]);
+   };
+   pointerCursor = {
+     name = "breeze_cursors";
+     size = 16;
+     package = pkgs.plasma5.breeze-qt5;
+   };
+  };
+  # xresources.properties = {
+  #   "Xft.dpi" = "220";
+  #   "Xcursor.theme" = "Vanilla-DMZ";
+  #   "Xcursor.size" = "32";
+  # };
 }
