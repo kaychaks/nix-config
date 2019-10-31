@@ -7,6 +7,12 @@ let
   all-hies = import (fetchTarball "https://github.com/infinisil/all-hies/tarball/master") {};
 
   lib = pkgs.stdenv.lib;
+  restart-taffybar = ''
+    echo "Restarting taffybar..."
+    $DRY_RUN_CMD rm -fr $HOME/.cache/taffybar/
+    $DRY_RUN_CMD systemctl --user restart taffybar.service
+  '';
+
 in
 
 rec {
@@ -53,15 +59,29 @@ rec {
         recursive = true;
       };
       ".xmonad/xmonad.hs".source = "${nix_config_dir}/precision/configFiles/xmonad/xmonad.hs";
+      ".config/taffybar/taffybar.hs" = {
+        source = "${nix_config_dir}/precision/configFiles/xmonad/taffybar.hs";
+        onChange = restart-taffybar;
+      };
+      ".config/taffybar/taffybar.css" = {
+        source = "${nix_config_dir}/precision/configFiles/xmonad/taffybar.css";
+        onChange = restart-taffybar;
+      };
+      ".config/rofi/config".text = ''
+        rofi.font: SF Mono 24
+        rofi.terminal: termite
+        rofi.theme: ${pkgs.rofi}/share/rofi/themes/Monokai.rasi
+      '';
     };
 
     packages = with pkgs; [
       pandoc
+      rofi
 
       riot-desktop ## matrix client
       signal-desktop
       # zulip
-      discord
+      # discord
       hexchat
 
       # keybase-gui
@@ -84,6 +104,10 @@ rec {
     };
 
     taffybar = {
+      enable = true;
+    };
+
+    xscreensaver = {
       enable = true;
     };
   };
@@ -376,9 +400,9 @@ rec {
         set-option -g default-shell ${pkgs.zsh}/bin/zsh
 
         # rebind global key
-        unbind-key C-b
-        set-option -g prefix M-m
-        bind-key M-m send-prefix
+        # unbind-key C-b
+        # set-option -g prefix C-m
+        # bind-key C-m send-prefix
 
         bind 0 set status
         bind S choose-session
@@ -418,8 +442,8 @@ rec {
 
         bind-key -r "<" swap-window -t -1
         bind-key -r ">" swap-window -t +1
-        bind-key -n M-r run "tmux send-keys -t .+ C-l Up Enter"
-        bind-key -n M-t run "tmux send-keys -t _ C-l Up Enter"
+        bind-key -n C-r run "tmux send-keys -t .+ C-l Up Enter"
+        bind-key -n C-t run "tmux send-keys -t _ C-l Up Enter"
 
         ## Design Changes
 
@@ -486,6 +510,7 @@ rec {
   # xserver options
   xsession = {
    enable = true;
+   preferStatusNotifierItems = true;
    windowManager.xmonad = {
      enable = true;
      enableContribAndExtras = true;
@@ -493,13 +518,8 @@ rec {
    };
    pointerCursor = {
      name = "breeze_cursors";
-     size = 16;
+     size = 32;
      package = pkgs.plasma5.breeze-qt5;
    };
   };
-  # xresources.properties = {
-  #   "Xft.dpi" = "220";
-  #   "Xcursor.theme" = "Vanilla-DMZ";
-  #   "Xcursor.size" = "32";
-  # };
 }
