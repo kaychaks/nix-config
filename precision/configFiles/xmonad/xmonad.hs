@@ -52,6 +52,6 @@ myManageHook = composeAll [
   className =? "Thunderbird" --> doShift "6: Mail",
   className =? "Signal" --> doShift "3: Chat",
   className =? "Hexchat" --> doShift "3: Chat",
-  className =? "Files" --> doFloat,
+  className =? "Org.gnome.Nautilus" --> doFloat,
   isFullscreen --> doFullFloat
   ]

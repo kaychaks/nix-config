@@ -148,84 +148,78 @@
       layout = "us";
       exportConfiguration = true;
 
-      autoRepeatInterval = 30;
-      autoRepeatDelay = 200;
+      autoRepeatInterval = 10;
+      autoRepeatDelay = 300;
       xkbOptions = "ctrl:nocaps,rupeesign:4,ctrl:swap_lalt_lctl_lwin";
 
       # GPU
-      # videoDrivers = [ "amdgpu-pro" ];
+      # videoDrivers = [ "amdgpu" ];
 
       # DPI
-      monitorSection = ''
-        DisplaySize 406 228
-      '';
+      # monitorSection = ''
+      #   DisplaySize 406 228
+      # '';
 
       # Enable touchpad support.
       libinput = {
         enable = true;
         naturalScrolling = false;
-        disableWhileTyping = true;
-        tapping = false;
-        accelSpeed = "0.7";
-      };
-
-
-      # Enable the GNome Desktop Environment
-      desktopManager = {
-        gnome3.enable = false;
-        xterm.enable = true;
-        default = "none";
+        # disableWhileTyping = true;
+        # tapping = false;
+        # accelSpeed = "0.9";
       };
 
       displayManager = {
-        gdm.enable = true;
-
-        # only way to encode settings in gnome3, weird
-        sessionCommands = ''
-          dconf write /org/gnome/desktop/peripherals/keyboard/repeat-interval 'uint32 20'
-          dconf write /org/gnome/desktop/peripherals/keyboard/delay 'uint32 300'
-
-          dconf write /org/gnome/desktop/peripherals/touchpad/natural-scroll false
-
-          dconf write /org/gtk/settings/file-chooser/clock-format "'24h'"
-
-          dconf write /org/gnome/desktop/interface/gtk-key-theme "'Emacs'"
-          dconf write /org/gnome/desktop/interface/gtk-theme "'Adwaita-dark'"
-
-          dconf write /org/gnome/desktop/interface/monospace-font-name "'SF Mono 13'"
-          dconf write /org/gnome/desktop/interface/font-name "'SF Pro Display 13'"
-          dconf write /org/gnome/desktop/interface/document-font-name "'SF Pro Display Medium 13'"
-          dconf write /org/gnome/desktop/wm/preferences/titlebar-font "'SF Pro Display Bold 13'"
-          dconf write /org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/font "'SF Mono 14'"
-          dconf write /org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/audible-bell false
-
-          dconf write /org/gnome/desktop/input-sources/xkb-options  "['rupeesign:4', 'ctrl:nocaps', 'ctrl:swap_lalt_lctl_lwin']"
-
-
-          dconf write /org/gnome/desktop/wm/keybindings/switch-applications "['<Primary>Tab', '<Alt>Tab', '<Primary>Space']"
-          dconf write /org/gnome/desktop/wm/keybindings/switch-applications-backward "['<Primary><Shift>Tab', '<Alt><Shift>Tab', '<Primary><Shift>Space']"
-          dconf write /org/gnome/settings-daemon/plugins/media-keys/search "'<Alt>space'"
-          dconf write /org/gnome/desktop/wm/keybindings/switch-group "['<Primary>grave']"
-          dconf write /org/gnome/desktop/wm/keybindings/switch-group-backward "['<Primary><Shift>grave']"
-          dconf write /org/gnome/desktop/wm/keybindings/close "['<Alt>F4', '<Primary>q']"
-
-          dconf write /org/gnome/desktop/privacy/disable-camera true
-          dconf write /org/gnome/desktop/privacy/disable-microphone true
-          dconf write /org/gnome/desktop/privacy/remove-old-temp-files true
-          dconf write /org/gnome/desktop/privacy/remove-old-trash-files true
-        '';
-
-
+        lightdm.enable = true;
+        lightdm.greeters.pantheon.enable = true;
       };
 
-      # windowManager = {
-      #   xmonad = {
-      #     enable = true;
-      #     enableContribAndExtras = true;
-      #     extraPackages = (haskellPackages: [
-      #       haskellPackages.taffybar
-      #     ]);
-      #   };
+      # Enable the GNome Desktop Environment
+      # desktopManager = {
+      #   gnome3.enable = true;
+      #   xterm.enable = true;
+      #   default = "none";
+      # };
+
+      # displayManager = {
+      #   gdm.enable = true;
+
+      #   # only way to encode settings in gnome3, weird
+      #   sessionCommands = ''
+      #     dconf write /org/gnome/desktop/peripherals/keyboard/repeat-interval 'uint32 20'
+      #     dconf write /org/gnome/desktop/peripherals/keyboard/delay 'uint32 300'
+
+      #     dconf write /org/gnome/desktop/peripherals/touchpad/natural-scroll false
+
+      #     dconf write /org/gtk/settings/file-chooser/clock-format "'24h'"
+
+      #     dconf write /org/gnome/desktop/interface/gtk-key-theme "'Emacs'"
+      #     dconf write /org/gnome/desktop/interface/gtk-theme "'Adwaita-dark'"
+
+      #     dconf write /org/gnome/desktop/interface/monospace-font-name "'SF Mono 13'"
+      #     dconf write /org/gnome/desktop/interface/font-name "'SF Pro Display 13'"
+      #     dconf write /org/gnome/desktop/interface/document-font-name "'SF Pro Display Medium 13'"
+      #     dconf write /org/gnome/desktop/wm/preferences/titlebar-font "'SF Pro Display Bold 13'"
+      #     dconf write /org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/font "'SF Mono 14'"
+      #     dconf write /org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/audible-bell false
+
+      #     dconf write /org/gnome/desktop/input-sources/xkb-options  "['rupeesign:4', 'ctrl:nocaps', 'ctrl:swap_lalt_lctl_lwin']"
+
+
+      #     dconf write /org/gnome/desktop/wm/keybindings/switch-applications "['<Primary>Tab', '<Alt>Tab', '<Primary>Space']"
+      #     dconf write /org/gnome/desktop/wm/keybindings/switch-applications-backward "['<Primary><Shift>Tab', '<Alt><Shift>Tab', '<Primary><Shift>Space']"
+      #     dconf write /org/gnome/settings-daemon/plugins/media-keys/search "'<Alt>space'"
+      #     dconf write /org/gnome/desktop/wm/keybindings/switch-group "['<Primary>grave']"
+      #     dconf write /org/gnome/desktop/wm/keybindings/switch-group-backward "['<Primary><Shift>grave']"
+      #     dconf write /org/gnome/desktop/wm/keybindings/close "['<Alt>F4', '<Primary>q']"
+
+      #     dconf write /org/gnome/desktop/privacy/disable-camera true
+      #     dconf write /org/gnome/desktop/privacy/disable-microphone true
+      #     dconf write /org/gnome/desktop/privacy/remove-old-temp-files true
+      #     dconf write /org/gnome/desktop/privacy/remove-old-trash-files true
+      #   '';
+
+
       # };
     };
 
@@ -277,7 +271,7 @@
   };
 
   programs = {
-    # dconf.enable = true;
+    dconf.enable = true;
     zsh = {
       enable = true;
     };

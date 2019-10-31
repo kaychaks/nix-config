@@ -58,7 +58,7 @@ rec {
         source = "${nix_config_dir}/dot-emacs/spacemacs-private";
         recursive = true;
       };
-      ".xmonad/xmonad.hs".source = "${nix_config_dir}/precision/configFiles/xmonad/xmonad.hs";
+      # ".xmonad/xmonad.hs".source = "${nix_config_dir}/precision/configFiles/xmonad/xmonad.hs";
       ".config/taffybar/taffybar.hs" = {
         source = "${nix_config_dir}/precision/configFiles/xmonad/taffybar.hs";
         onChange = restart-taffybar;
@@ -255,7 +255,7 @@ rec {
       };
 
       signing = {
-        signByDefault = true;
+        signByDefault = false;
         key = "604E119FFCEFF635";
       };
 
@@ -515,6 +515,7 @@ rec {
      enable = true;
      enableContribAndExtras = true;
      extraPackages = (haskellPackages: [haskellPackages.taffybar]);
+     config = ./configFiles/xmonad/xmonad.hs;
    };
    pointerCursor = {
      name = "breeze_cursors";
