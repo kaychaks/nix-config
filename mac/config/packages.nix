@@ -21,7 +21,7 @@ in
   aspellDicts.en
   vim
   emacs26
-  texlive.combined.scheme-full
+#  texlive.combined.scheme-full
   VSCode
   # Alfred
 
@@ -39,6 +39,8 @@ in
   gnutar
   watchman
   nix-prefetch-git
+  clang
+  fd
 
   # networking
   openssl
@@ -73,9 +75,15 @@ in
   sbt-extras
   jdk
 
+
   nodejs_latest
   nodePackages.node2nix
   nodePackages.eslint
+  nodePackages.prettier
+  nodePackages.tern
+  nodePackages.typescript-language-server
+  nodePackages.typescript
+
 
   # (exe haskellPackages.cabal-install)
   # (exe haskellPackages.cabal2nix)

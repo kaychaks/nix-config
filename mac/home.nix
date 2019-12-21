@@ -25,12 +25,13 @@ in rec {
 
     overlays = [
       (import ../overlays/01-nix-scripts.nix)
-      (import ../overlays/10-emacs.nix)
+      # (import "../overlays/11-spacemacs")
+      (import "/Users/kaushik/Developer/src/personal/nix-config/overlays/11-doom")
     ];
   };
 
   home = {
-    packages = with pkgs; [];
+    packages = with pkgs; [emacs-doom];
 
     file = {
       ".curlrc".text = ''
@@ -38,9 +39,17 @@ in rec {
         proxy-insecure
        '';
 
-       ".spacemacs".source = ../dot-emacs/spacemacs;
+       # ".spacemacs".source = ../dot-emacs/spacemacs;
+       # ".emacs.d" = {
+       #   source = pkgs.spacemacs;
+       #   recursive = true;
+       # };
+       #".emacs.d" = {
+       #  source = pkgs.emacs-doom;
+       #  recursive = true;
+       #};
 
-      "${xdg.dataHome}/spacemacs/private".source = ../dot-emacs/spacemacs-private;
+      # "${xdg.dataHome}/spacemacs/private".source = ../dot-emacs/spacemacs-private;
 
       "${xdg.dataHome}/revealjs".source = pkgs.fetchzip {url = "${revealjs_source}" ; sha256 = "14cva2hxdv4gxpz2a996qs8xhxffw97a90gkz2mmgdczh1kyn1sc"; };
 
