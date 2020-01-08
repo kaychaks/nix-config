@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+
+PKGNAME="${1:-$(basename $(pwd))}"
+shift 1
+
+if [ $(find . -name "*.cabal" | wc -l) -eq 0 ]; then
+    nix-shell -p "haskell.compiler.ghc865" --command "cabal init"
+fi
+
+cat > default.nix <<EOF
+    { nixpkgs ? import <nixpkgs> {}, compiler ? "ghc865"}:
+    let
+    inherit (nixpkgs) pkgs;
+    haskellPackages = pkgs.haskell.packages.\${compiler};
+    in
+        {
+            $PKGNAME = haskellPackages.developPackage {
+                returnShellEnv = false;
+                root = ./.;
+            };
+        }
+EOF
+
+cat > shell.nix <<EOF
+    { nixpkgs ? import <nixpkgs> {}, compiler ? "ghc865", withHoogle ? false}:
+    let
+    inherit (nixpkgs) pkgs;
+    haskellPackages = pkgs.haskell.packages.\${compiler};
+    project = import ./. { inherit nixpkgs compiler; };
+    in
+    with haskellPackages;
+    shellFor {
+      inherit withHoogle;
+      packages = p: [ project.$PKGNAME ];
+      buildInputs = [
+                  ghcid
+                  cabal-install
+                  hlint
+                  hoogle
+                  fast-tags
+                  pointfree
+                  hindent
+                  stylish-haskell
+      ];
+    }
+EOF
+
+nix-shell --command "cabal new-clean"
+nix-shell --command "cabal new-configure $@"
+
+cat > cabal.project << EOF
+    packages : .
+EOF
+
+

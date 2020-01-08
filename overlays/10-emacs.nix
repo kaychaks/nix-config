@@ -14,9 +14,9 @@ self: pkgs:
     imagemagick.dev ];
     patches = lib.optionals stdenv.isDarwin
     [
-      ../overlays/patches/tramp-detect-wrapped-gvfsd.patch
-      ../overlays/patches/at-fdcwd.patch
-      ../overlays/patches/emacs-26.patch
+      ./patches/tramp-detect-wrapped-gvfsd.patch
+      ./patches/at-fdcwd.patch
+      ./patches/emacs-26.patch
     ];
 
     CFLAGS = "-Ofast -momit-leaf-frame-pointer -DMAC_OS_X_VERSION_MAX_ALLOWED=101200";
