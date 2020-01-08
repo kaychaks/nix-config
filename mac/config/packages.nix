@@ -67,9 +67,9 @@ in
 
 
   # dev
-  julia
-  haskellPackages.Agda
-  lean
+  # julia
+  # haskellPackages.Agda
+  # lean
   sbt-extras
   jdk
 

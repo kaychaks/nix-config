@@ -24,8 +24,8 @@ in rec {
     };
 
     overlays = [
-      (import ./overlays/01-nix-scripts.nix)
-      (import ./overlays/10-emacs.nix)
+      (import ../overlays/01-nix-scripts.nix)
+      (import ../overlays/10-emacs.nix)
     ];
   };
 
@@ -38,9 +38,9 @@ in rec {
         proxy-insecure
        '';
 
-       ".spacemacs".source = ./dot-emacs/spacemacs;
+       ".spacemacs".source = ../dot-emacs/spacemacs;
 
-      "${xdg.dataHome}/spacemacs/private".source = ./dot-emacs/spacemacs-private;
+      "${xdg.dataHome}/spacemacs/private".source = ../dot-emacs/spacemacs-private;
 
       "${xdg.dataHome}/revealjs".source = pkgs.fetchzip {url = "${revealjs_source}" ; sha256 = "14cva2hxdv4gxpz2a996qs8xhxffw97a90gkz2mmgdczh1kyn1sc"; };
 
@@ -91,7 +91,7 @@ in rec {
         TERM = "xterm-256color";
         LANG = "en_US.UTF-8";
         VISUAL = "emacsclient";
-        HOME_MANAGER_CONFIG = "${home_directory}/Developer/src/personal/nix-config/home.nix";
+        HOME_MANAGER_CONFIG = "${home_directory}/Developer/src/personal/nix-config/mac/home.nix";
       };
 
       shellAliases = {

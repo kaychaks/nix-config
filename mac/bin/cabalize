@@ -4,7 +4,7 @@ PKGNAME="${1:-$(basename $(pwd))}"
 shift 1
 
 if [ $(find . -name "*.cabal" | wc -l) -eq 0 ]; then
-    nix-shell -p "haskell.compiler.ghc864" --command "cabal init"
+    nix-shell -p "haskell.compiler.ghc865" --command "cabal init"
 fi
 
 cat > default.nix <<EOF
