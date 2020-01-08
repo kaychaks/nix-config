@@ -8,7 +8,7 @@ if [ $(find . -name "*.cabal" | wc -l) -eq 0 ]; then
 fi
 
 cat > default.nix <<EOF
-    { nixpkgs ? import <nixpkgs> {}, compiler ? "ghc864"}:
+    { nixpkgs ? import <nixpkgs> {}, compiler ? "ghc865"}:
     let
     inherit (nixpkgs) pkgs;
     haskellPackages = pkgs.haskell.packages.\${compiler};
@@ -22,7 +22,7 @@ cat > default.nix <<EOF
 EOF
 
 cat > shell.nix <<EOF
-    { nixpkgs ? import <nixpkgs> {}, compiler ? "ghc864", withHoogle ? false}:
+    { nixpkgs ? import <nixpkgs> {}, compiler ? "ghc865", withHoogle ? false}:
     let
     inherit (nixpkgs) pkgs;
     haskellPackages = pkgs.haskell.packages.\${compiler};

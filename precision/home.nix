@@ -13,6 +13,10 @@ let
     $DRY_RUN_CMD systemctl --user restart taffybar.service
   '';
 
+  fzf_c = "https://raw.githubusercontent.com/LnL7/nix-darwin/master/modules/programs/zsh/fzf-completion.zsh";
+  fzf_g = "https://raw.githubusercontent.com/LnL7/nix-darwin/master/modules/programs/zsh/fzf-git.zsh";
+  fzf_h = "https://raw.githubusercontent.com/LnL7/nix-darwin/master/modules/programs/zsh/fzf-history.zsh";
+
 in
 
 rec {
@@ -27,6 +31,7 @@ rec {
       (import "${nix_config_dir}/overlays/11-spacemacs")
       (import "${nix_config_dir}/overlays/30-thunderbird.nix")
       (import "${nix_config_dir}/overlays/31-zulip.nix")
+      (import "${nix_config_dir}/overlays/20-rofi-calc.nix")
     ];
   };
 
@@ -36,6 +41,10 @@ rec {
     dataHome = "${home_dir}/.local/share";
     cacheHome = "${home_dir}/.cache";
     configHome = "${home_dir}/.config";
+
+    dataFile."zsh/fzf-completion.zsh".source = pkgs.fetchurl {url = "${fzf_c}";sha256 = "0diln8gbqyg455zkr1iwb5hz563zzffx9dfffixihw525cg5q789";};
+    dataFile."zsh/fzf-git.zsh".source = pkgs.fetchurl {url = "${fzf_g}";sha256 = "0crxflbc9vvpirgld7l9ssnf348py6mbp1vz118slfra551lwbxb";};
+    dataFile."zsh/fzf-history.zsh".source = pkgs.fetchurl {url = "${fzf_h}";sha256 = "187vqvpnp45b4xj47qzn4s9jj785zbfbmdfzh1zg2q8d19xgnz5w";};
   };
 
   home = {
@@ -48,7 +57,9 @@ rec {
       LANG = "en_US.UTF-8";
     };
 
+
     file = {
+      "bin" = {source = ./bin; recursive = true;};
       ".spacemacs".source = "${nix_config_dir}/dot-emacs/spacemacs";
       ".emacs.d" = {
         source = pkgs.spacemacs;
@@ -72,32 +83,62 @@ rec {
         rofi.terminal: termite
         rofi.theme: ${pkgs.rofi}/share/rofi/themes/Monokai.rasi
       '';
+      ".config/rofi/lib/calc.la".source = "${pkgs.rofi-calc}/libs/calc.la";
+      ".config/rofi/lib/calc.so".source = "${pkgs.rofi-calc}/libs/calc.so";
     };
 
     packages = with pkgs; [
+      ## TOOLS
       pandoc
       rofi
+      ffmpeg
+      gitAndTools.git-crypt
+      gitAndTools.pass-git-helper
+      pass
+      brightnessctl
+      betterlockscreen
 
-      riot-desktop ## matrix client
+      libqalculate
+      rofi-calc
+
+      ## CHAT
+      # riot-desktop ## matrix client
       signal-desktop
       # zulip
-      # discord
+      discord
       hexchat
 
-      # keybase-gui
+      ## APPLICATIONS
       zotero
       thunderbird-beta
+      vlc
+      gnome3.gpaste ## clipboard manager
+      feh ## image viewer
+      okular ## document viewer
+      kleopatra ## GnuPG UI client
+      xfce.thunar ## files manager UI
+      libreoffice
 
+      ## DEV
+      jq
+      python3
+      cabal2nix
+      cabal-install
+      postgresql
+      haskellPackages.ghcid
+      haskellPackages.stylish-haskell
+      haskellPackages.hoogle
+      haskellPackages.apply-refact
+      haskellPackages.hasktags
+      haskellPackages.hlint
       (all-hies.selection { selector = p: { inherit (p) ghc864 ghc865 ghc843 ; }; })
 
-      ## TODO: list of gnome extensions
+      nodejs_latest
+      nodePackages.eslint
     ];
   };
 
   services = {
-    # keybase.enable = true;
-    # kbfs.enable = true;
-    # kbfs.mountPoint = "/keybase";
     gpg-agent = {
       enable = true;
       enableSshSupport = true;
@@ -107,12 +148,93 @@ rec {
       enable = true;
     };
 
-    xscreensaver = {
+    screen-locker = {
       enable = true;
+      lockCmd = "betterlockscreen -l dim";
     };
+
   };
 
   programs = {
+    autorandr = {
+      enable = true;
+      hooks.postswitch = {
+        "reload-taffybar" = "systemctl --user restart taffybar.service";
+      };
+      profiles = {
+        solo = {
+          fingerprint = {
+            eDP-1 = "00ffffffffffff0006afeb4100000000221c0104b522137802af95a65435b5260f50540000000101010101010101010101010101010152d000a0f0703e803020350058c11000001a52d000a0f07068823020350025a51000001a000000fe00375837314880423135365a414e0000000000054122b2001200000b010a2020013902030f00e3058000e606050160602800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000aa";
+          };
+          config = {
+            "eDP-1" = {
+              enable = true;
+              mode = "3840x2160";
+              rate = "60.0";
+              primary = true;
+            };
+          };
+        };
+        clamshell = {
+          fingerprint = {
+            DP-1-6 = "00ffffffffffff0010ace0404c353032271c0104b5371f783aa195af4f35b7260c5054a54b00714fa9408180d1c00101010101010101565e00a0a0a029503020350029372100001a000000ff003550564d503839513230354c0a000000fc0044454c4c20555032353136440a000000fd00324b1e5819010a20202020202001f302031cf14f90050403020716010611121513141f23091f0783010000023a801871382d40582c450029372100001e7e3900a080381f4030203a0029372100001a011d007251d01e206e28550029372100001ebf1600a08038134030203a0029372100001a00000000000000000000000000000000000000000000000000000086";
+          };
+          config = {
+            "DP-1-6" = {
+              enable = true;
+              mode = "2560x1440";
+              rate = "60.0";
+              primary = true;
+            };
+          };
+        };
+        dual = {
+          fingerprint = {
+            DP-1-6 = "00ffffffffffff0010ace0404c353032271c0104b5371f783aa195af4f35b7260c5054a54b00714fa9408180d1c00101010101010101565e00a0a0a029503020350029372100001a000000ff003550564d503839513230354c0a000000fc0044454c4c20555032353136440a000000fd00324b1e5819010a20202020202001f302031cf14f90050403020716010611121513141f23091f0783010000023a801871382d40582c450029372100001e7e3900a080381f4030203a0029372100001a011d007251d01e206e28550029372100001ebf1600a08038134030203a0029372100001a00000000000000000000000000000000000000000000000000000086";
+            eDP-1 = "00ffffffffffff0006afeb4100000000221c0104b522137802af95a65435b5260f50540000000101010101010101010101010101010152d000a0f0703e803020350058c11000001a52d000a0f07068823020350025a51000001a000000fe00375837314880423135365a414e0000000000054122b2001200000b010a2020013902030f00e3058000e606050160602800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000aa";
+          };
+          config = {
+            "DP-1-6" = {
+              enable = true;
+              mode = "2560x1440";
+              rate = "60.0";
+              primary = true;
+              position = "9438x142";
+            };
+            "eDP-1" = {
+              enable = true;
+              mode = "3840x2160";
+              rate = "60.0";
+              primary = false;
+              position = "5598x142";
+            };
+          };
+        };
+        hdmi_dual = {
+          fingerprint = {
+            HDMI-1-3 = "00ffffffffffff0010ace1404c353032271c010380371f782aa195af4f35b7260c5054a54b00714fa9408180d1c00101010101010101565e00a0a0a029503020350029372100001a000000ff003550564d503839513230354c0a000000fc0044454c4c20555032353136440a000000fd00324b1e5819000a2020202020200139020324f14f90050403020716010611121513141f23091f078301000067030c001000383e023a801871382d40582c450029372100001e7e3900a080381f4030203a0029372100001a011d007251d01e206e28550029372100001ebf1600a08038134030203a0029372100001a0000000000000000000000000000000000000082";
+            eDP-1 = "00ffffffffffff0006afeb4100000000221c0104b522137802af95a65435b5260f50540000000101010101010101010101010101010152d000a0f0703e803020350058c11000001a52d000a0f07068823020350025a51000001a000000fe00375837314880423135365a414e0000000000054122b2001200000b010a2020013902030f00e3058000e606050160602800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000aa";
+          };
+          config = {
+            "HDMI-1-3" = {
+              enable = true;
+              mode = "2560x1440";
+              rate = "60.0";
+              primary = true;
+              position = "9438x142";
+            };
+            "eDP-1" = {
+              enable = true;
+              mode = "3840x2160";
+              rate = "60.0";
+              primary = false;
+              position = "5598x142";
+            };
+          };
+        };
+      };
+    };
+
     home-manager.enable = true;
 
     gpg.enable = true;
@@ -126,6 +248,7 @@ rec {
     termite = {
       enable = true;
       allowBold = true;
+      font = "SF Mono 12";
       backgroundColor = "rgba(0, 43, 54)";
       clickableUrl = true;
       foregroundColor = "#93a1a1";
@@ -171,7 +294,6 @@ rec {
         color20 = #839496
         color21 = #eee8d5
       '';
-      font = "SF Mono 12";
     };
 
     direnv = {
@@ -239,6 +361,7 @@ rec {
         branch.autosetupmerge = true;
         github.user           = "kaychaks";
         pull.rebase           = true;
+        credential.helper     = "${pkgs.gitAndTools.pass-git-helper}/bin/pass-git-helper";
 
         color = {
           status      = "auto";
@@ -308,6 +431,27 @@ rec {
       enable = true;
       autocd = true;
       defaultKeymap = "emacs";
+      enableCompletion = true;
+
+      oh-my-zsh = {
+        enable = true;
+        plugins = [
+          "git"
+          "sudo"
+          "cabal"
+          "docker"
+          "dotenv"
+          "emacs"
+          "vi-mode"
+          "git"
+          "git-extras"
+          "history"
+          "man"
+          "npm"
+          "ssh-agent"
+          "tmux"
+        ];
+      };
 
       history = {
         size = 50000;
@@ -331,31 +475,15 @@ rec {
       };
 
       initExtra = ''
-        take() {
-          mkdir -p $@ && cd ''${@:$#}
-        }
-        :d() {
-          eval "$(direnv hook zsh)"
-        }
-        :r() {
-          rm -f .direnv/dump-* && direnv reload
-        }
 
-        autoload -U promptinit && promptinit
-        setopt PROMPTSUBST
-        _prompt_nix() {
-        [ -z "$IN_NIX_SHELL" ] || echo "%F{yellow}%B[''${name:+$name}λ]%b%f "
-        }
-        PS1='%F{blue}λ%f '
-        RPS1='$(_prompt_nix)%F{green}%~%f'
-
-        setopt AUTOCD AUTOPUSHD
-        autoload -U down-line-or-beginning-search
-        autoload -U up-line-or-beginning-search
-        bindkey '^[[A' down-line-or-beginning-search
-        bindkey '^[[A' up-line-or-beginning-search
-        zle -N down-line-or-beginning-search
-        zle -N up-line-or-beginning-search
+        # setopt AUTOCD AUTOPUSHD
+        # autoload -U down-line-or-beginning-search
+        # autoload -U up-line-or-beginning-search
+        # bindkey '^[[A' down-line-or-beginning-search
+        # bindkey '^[[A' up-line-or-beginning-search
+        # zle -N down-line-or-beginning-search
+        # zle -N up-line-or-beginning-search
+        PS1=' %F{blue}λ%f '
 
         source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
@@ -369,13 +497,7 @@ rec {
             tmux attach || break
           done
         fi
-
-        # Read system-wide modifications.
-        if test -f /etc/zshrc.local; then
-          source /etc/zshrc.local
-        fi
       '';
-
     };
 
     tmux = {
@@ -424,6 +546,9 @@ rec {
         bind-key | split-window -h -c "#{pane_current_path}"
         bind-key _ split-window -c "#{pane_current_path}"
 
+        # new session
+        bind -r C-s new-session
+
         # moving between panes with vim movement keys
         bind h select-pane -L
         bind j select-pane -D
@@ -442,8 +567,8 @@ rec {
 
         bind-key -r "<" swap-window -t -1
         bind-key -r ">" swap-window -t +1
-        bind-key -n C-r run "tmux send-keys -t .+ C-l Up Enter"
-        bind-key -n C-t run "tmux send-keys -t _ C-l Up Enter"
+        bind-key -n S-r run "tmux send-keys -t .+ C-l Up Enter"
+        bind-key -n S-t run "tmux send-keys -t _ C-l Up Enter"
 
         ## Design Changes
 
@@ -472,10 +597,10 @@ rec {
         set -g status-attr dim
         set -g status-left ' '
 
-        set -g status-right '#[fg=colour233,bg=colour58,bold] #(hostname) #[fg=colour233,bg=colour62,bold] %m/%d %H:%M '
+        set -g status-right '  #[fg=colour233,bg=colour58,bold] #(hostname) #[fg=colour233,bg=colour62,bold] %m/%d %H:%M  '
 
         set -g status-right-length 50
-        set -g status-left-length 20
+        # set -g status-left-length 20
 
         setw -g window-status-current-fg colour1
 
@@ -508,9 +633,25 @@ rec {
 
 
   # xserver options
+  xresources.extraConfig = ''
+    Xft.dpi: 180
+    Xft.autohint: 0
+    Xft.lcdfilter:  lcddefault
+    Xft.hintstyle:  hintfull
+    Xft.hinting: 1
+    Xft.antialias: 1
+    Xft.rgba: rgb
+  '';
   xsession = {
    enable = true;
    preferStatusNotifierItems = true;
+   initExtra = ''
+     xset r rate 200 30
+     xinput set-prop "DELL0926:00 044E:1220 Touchpad" "libinput Natural Scrolling Enabled" 0
+     xinput set-prop "DELL0926:00 044E:1220 Mouse" "libinput Natural Scrolling Enabled" 0
+     xinput set-prop "DELL0926:00 044E:1220 Touchpad" "libinput Tapping Enabled Default" 0
+     xinput set-prop "DELL0926:00 044E:1220 Mouse" "libinput Tapping Enabled Default" 0
+   '';
    windowManager.xmonad = {
      enable = true;
      enableContribAndExtras = true;
@@ -523,4 +664,20 @@ rec {
      package = pkgs.plasma5.breeze-qt5;
    };
   };
+
+  # systemd.user.services.volumeicon =
+  #   {
+  #     Unit = {
+  #       Description = "volume tray icon";
+  #     };
+
+  #     Service = {
+  #       ExecStart = "${pkgs.volumeicon}/bin/volumeicon";
+  #       Restart = "on-failure";
+  #     };
+
+  #     Install = {
+  #       WantedBy = [ "default.target" ];
+  #     };
+  #   };
 }

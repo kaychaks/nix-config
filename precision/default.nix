@@ -9,8 +9,6 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
     ];
-
-
   boot = {
       # Use the systemd-boot EFI boot loader.
       loader = {
@@ -40,6 +38,9 @@
   networking = {
     hostName = "tardis";
     networkmanager.enable = true;
+    useDHCP = false;
+    interfaces.eno1.useDHCP = true;
+    interfaces.wlp111s0.useDHCP = true;
   };
 
 
@@ -89,6 +90,7 @@
       enable = true;
       package = pkgs.bluezFull;
     };
+    brightnessctl.enable = true;
   };
 
   virtualisation.docker = {
@@ -104,6 +106,10 @@
   fonts = {
     enableFontDir = true;
     fonts = with pkgs; [
+      corefonts
+      inconsolata
+      source-code-pro
+      terminus_font
       fira-code
       font-awesome_5
       liberation_ttf
@@ -112,19 +118,15 @@
       vegur
     ];
     fontconfig = {
-      # ultimate.preset = "osx";
-      dpi = 180;
+      # dpi = 180;
       hinting.enable = false;
       defaultFonts = {
-        monospace = [ "SF Mono" "Fira Code" "Ubuntu Mono"];
+        monospace = [ "SF Mono" "Fira Code" "Source Code Pro" "Ubuntu Mono"];
         sansSerif = [ "SF Display" "Liberation Sans" "Arial" "Ubuntu" ];
         serif = [ "New York" "Liberation Serif" "Times New Roman" ];
       };
     };
   };
-
-
-
 
   services = {
     printing = {
@@ -135,6 +137,7 @@
     openssh.enable = true;
     devmon.enable = true;
     dbus.packages = [ pkgs.blueman ];
+    blueman.enable = true;
 
     keybase.enable = true;
 
@@ -148,30 +151,30 @@
       layout = "us";
       exportConfiguration = true;
 
-      autoRepeatInterval = 10;
-      autoRepeatDelay = 300;
+      autoRepeatInterval = 40;
+      autoRepeatDelay = 220;
       xkbOptions = "ctrl:nocaps,rupeesign:4,ctrl:swap_lalt_lctl_lwin";
 
       # GPU
       # videoDrivers = [ "amdgpu" ];
 
       # DPI
-      # monitorSection = ''
-      #   DisplaySize 406 228
-      # '';
+      monitorSection = ''
+        DisplaySize 406 228
+      '';
 
       # Enable touchpad support.
       libinput = {
         enable = true;
         naturalScrolling = false;
-        # disableWhileTyping = true;
-        # tapping = false;
-        # accelSpeed = "0.9";
+        disableWhileTyping = true;
+        accelSpeed = "0.9";
       };
+      windowManager.xmonad.enable = true;
 
       displayManager = {
         lightdm.enable = true;
-        lightdm.greeters.pantheon.enable = true;
+        # lightdm.greeters.pantheon.enable = true;
       };
 
       # Enable the GNome Desktop Environment
@@ -232,7 +235,7 @@
       TERM = "tmux-256color";
       LANG = "en_US.UTF-8";
       VISUAL = "vim";
-      # XCURSOR_SIZE = "32";
+      XCURSOR_SIZE = "32";
     };
     systemPackages = with pkgs; [
       # Tools
@@ -254,6 +257,17 @@
       which
       zlib
       zip
+      arandr
+      binutils
+      bind
+      file
+      gcc6
+      iptables
+      nmap
+      sudo
+      wireshark
+      pavucontrol
+      lsof
 
       # Apps
       keybase-gui
@@ -261,6 +275,10 @@
       # X
       gnome-breeze
       gnome3.adwaita-icon-theme
+      xclip
+      xfontsel
+      xlsfonts
+      xorg.xbacklight
 
       # Haskell Desktop
       haskellPackages.gtk-sni-tray
@@ -287,6 +305,6 @@
 
 
   system.stateVersion = "19.09";
-  system.autoUpgrade.enable = true;
+  system.autoUpgrade.enable = false;
 }
 

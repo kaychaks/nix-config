@@ -19,7 +19,8 @@
 	*/
 	all: unset;
 
-	font-family: "SF Pro Display", "Noto Sans", sans-serif;
+	/* font-family: "SF Pro Display", "Noto Sans", sans-serif; */
+	font-family: "Noto Sans", sans-serif ;
 	font-size: 10pt;
   font-weight: bold;
 	color: @my-gray;
@@ -28,18 +29,20 @@
 .taffy-box {
 	border-radius: 10px;
 	/* background-color: rgba(0.0, 0.0, 0.0, 0.3); */
-	background-color: rgba(36, 36, 36, 0.8);
+	/* background-color: rgba(36, 36, 36, 0.8); */
+	/* background-color: rgba(56, 60, 74, 0.3); */
+	background-color: rgba(41, 3, 81, 0.3);
 }
 
 .inner-pad {
-	padding-bottom: 5px;
-	padding-top: 5px;
+	padding-bottom: 2px;
+	padding-top: 3px;
 	padding-left: 2px;
 	padding-right: 2px;
 }
 
 .contents {
-	padding-bottom: 4px;
+	padding-bottom: 2px;
 	padding-top: 4px;
 	padding-right: 2px;
 	padding-left: 2px;
@@ -52,7 +55,7 @@
 .workspace-label {
 	padding-right: 3px;
 	padding-left: 2px;
-	font-size: 12pt;
+	/* font-size: 12pt; */
   color: @my-gray;
 }
 
@@ -62,7 +65,7 @@
 
 .active .workspace-label {
     color: @white;
-    border: 2px solid #dedede;
+    /* border: 2px solid #dedede; */
 }
 
 .visible .contents {
