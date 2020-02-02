@@ -5,6 +5,7 @@ let
   home_dir = "/home/${user}";
   nix_config_dir = "${home_dir}/src/ops/nix-config";
   all-hies = import (fetchTarball "https://github.com/infinisil/all-hies/tarball/master") {};
+  ghcide = import (builtins.fetchTarball "https://github.com/hercules-ci/ghcide-nix/tarball/master") {};
 
   lib = pkgs.stdenv.lib;
   restart-taffybar = ''
@@ -32,6 +33,7 @@ rec {
       (import "${nix_config_dir}/overlays/30-thunderbird.nix")
       (import "${nix_config_dir}/overlays/31-zulip.nix")
       (import "${nix_config_dir}/overlays/20-rofi-calc.nix")
+      # (import "${nix_config_dir}/precision/configFiles/taffybar/environment.nix")
     ];
   };
 
@@ -61,10 +63,10 @@ rec {
     file = {
       "bin" = {source = ./bin; recursive = true;};
       ".spacemacs".source = "${nix_config_dir}/dot-emacs/spacemacs";
-      ".emacs.d" = {
-        source = pkgs.spacemacs;
-        recursive = true;
-      };
+      # ".emacs.d" = {
+      #   source = pkgs.spacemacs;
+      #   recursive = true;
+      # };
       "${xdg.dataHome}/spacemacs/private" = {
         source = "${nix_config_dir}/dot-emacs/spacemacs-private";
         recursive = true;
@@ -132,6 +134,7 @@ rec {
       haskellPackages.hasktags
       haskellPackages.hlint
       (all-hies.selection { selector = p: { inherit (p) ghc864 ghc865 ghc843 ; }; })
+      (ghcide.ghcide-ghc865)
 
       nodejs_latest
       nodePackages.eslint
@@ -242,7 +245,6 @@ rec {
     emacs = {
       enable = true;
       package = pkgs.emacs.override { inherit (pkgs) imagemagick; };
-      extraPackages = epkgs: with epkgs; [pdf-tools];
     };
 
     termite = {

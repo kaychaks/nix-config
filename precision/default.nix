@@ -97,10 +97,6 @@
     enable = true;
   };
 
-  virtualisation.docker = {
-    enable = true;
-  };
-
   i18n = {
     consoleFont = "latarcyrheb-sun32";
     consoleKeyMap = "us";
@@ -155,7 +151,7 @@
       layout = "us";
       exportConfiguration = true;
 
-      autoRepeatInterval = 40;
+      autoRepeatInterval = 30;
       autoRepeatDelay = 220;
       xkbOptions = "ctrl:nocaps,rupeesign:4,ctrl:swap_lalt_lctl_lwin";
 
