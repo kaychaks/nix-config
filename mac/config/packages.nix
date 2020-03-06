@@ -24,6 +24,8 @@ in
 #  texlive.combined.scheme-full
   VSCode
   # Alfred
+  multimarkdown
+  pandoc
 
   # system
   htop
@@ -46,7 +48,6 @@ in
   openssl
   youtube-dl
   ffmpeg
-  pandoc
   curl
   wget
   rsync
@@ -77,6 +78,7 @@ in
 
 
   nodejs_latest
+  # nodejs-12_x
   nodePackages.node2nix
   nodePackages.eslint
   nodePackages.prettier
@@ -85,12 +87,12 @@ in
   nodePackages.typescript
 
 
-  # (exe haskellPackages.cabal-install)
-  # (exe haskellPackages.cabal2nix)
-  # (exe haskellPackages.fast-tags)
-  # (exe haskellPackages.ghcid)
-  # (exe haskellPackages.hlint)
-  # (exe haskellPackages.hoogle)
-  # (exe haskellPackages.pointfree)
-  # (exe haskellPackages.stylish-haskell)
+  (exe haskellPackages.cabal-install)
+  (exe haskellPackages.cabal2nix)
+  (exe haskellPackages.fast-tags)
+  (exe haskellPackages.ghcid)
+  (exe haskellPackages.hlint)
+  (exe haskellPackages.hoogle)
+  (exe haskellPackages.pointfree)
+  (exe haskellPackages.stylish-haskell)
 ]
