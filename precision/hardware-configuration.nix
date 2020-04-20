@@ -13,13 +13,14 @@
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
-  boot.initrd.luks.devices = [
-    {
+  boot.initrd.luks.devices = 
+  {
+    root = {
       name = "root";
       device = "/dev/nvme0n1p2";
       preLVM = true;
-    }
-  ];
+    };
+  };
 
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/ce9ed1c0-d05b-4460-acb6-9d3f3857c9fa";
@@ -37,6 +38,4 @@
 
   nix.maxJobs = lib.mkDefault 16;
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
-  # High-DPI console
-  i18n.consoleFont = lib.mkDefault "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
 }

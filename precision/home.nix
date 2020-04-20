@@ -18,6 +18,7 @@ let
   fzf_g = "https://raw.githubusercontent.com/LnL7/nix-darwin/master/modules/programs/zsh/fzf-git.zsh";
   fzf_h = "https://raw.githubusercontent.com/LnL7/nix-darwin/master/modules/programs/zsh/fzf-history.zsh";
 
+
 in
 
 rec {
@@ -61,6 +62,9 @@ rec {
 
 
     file = {
+      ".config/sway/config".source = "${nix_config_dir}/precision/configFiles/sway.config";
+      ".config/waybar/config".source = "${nix_config_dir}/precision/configFiles/waybar.config";
+      ".config/waybar/style.css".source = "${nix_config_dir}/precision/configFiles/waybar.css";
       "bin" = {source = ./bin; recursive = true;};
       ".spacemacs".source = "${nix_config_dir}/dot-emacs/spacemacs";
       # ".emacs.d" = {
@@ -81,9 +85,39 @@ rec {
         onChange = restart-taffybar;
       };
       ".config/rofi/config".text = ''
-        rofi.font: SF Mono 24
+        rofi.font: SF Mono 16
         rofi.terminal: termite
         rofi.theme: ${pkgs.rofi}/share/rofi/themes/Monokai.rasi
+      '';
+      ".config/wofi/config".text = ''
+        mode=drun
+        width=600
+        height=600
+        colors=colors
+      '';
+      ".config/wofi/style.css".text = ''
+        window {
+          margin: 5px;
+          background: #171717;
+          color: #FFCB83;
+          font-family: 'Fira Code';
+          font-size: 15px;
+          border: 3px solid #000000;
+          border-radius: 10px;
+          outline: 0;
+        }
+
+        #input {
+          color: #FFCB83;
+          background: #171717;
+          border: 3px solid #000000;
+          border-top-left-radius: 10px;
+          border-top-right-radius: 10px;
+        }
+
+        #text {
+          padding: 2px;
+        }
       '';
       ".config/rofi/lib/calc.la".source = "${pkgs.rofi-calc}/libs/calc.la";
       ".config/rofi/lib/calc.so".source = "${pkgs.rofi-calc}/libs/calc.so";
@@ -102,6 +136,7 @@ rec {
 
       libqalculate
       rofi-calc
+      clipmenu
 
       ## CHAT
       # riot-desktop ## matrix client
@@ -114,7 +149,7 @@ rec {
       zotero
       thunderbird-beta
       vlc
-      gnome3.gpaste ## clipboard manager
+      mpv
       feh ## image viewer
       okular ## document viewer
       kleopatra ## GnuPG UI client
@@ -122,8 +157,10 @@ rec {
       libreoffice
 
       ## DEV
+      nixfmt
       jq
       python3
+      ruby
       cabal2nix
       cabal-install
       postgresql
@@ -148,11 +185,11 @@ rec {
     };
 
     taffybar = {
-      enable = true;
+      enable = false;
     };
 
     screen-locker = {
-      enable = true;
+      enable = false;
       lockCmd = "betterlockscreen -l dim";
     };
 
@@ -247,6 +284,11 @@ rec {
       package = pkgs.emacs.override { inherit (pkgs) imagemagick; };
     };
 
+    vscode = {
+      enable = true;
+      package = pkgs.vscodium;
+    };
+
     termite = {
       enable = true;
       allowBold = true;
@@ -321,9 +363,10 @@ rec {
     };
 
 
-    firefox = {
-      enable = true;
-    };
+    # firefox = {
+    #   enable = true;
+    #   package= pkgs.firefox-wayland;
+    # };
     chromium = {
       enable = true;
     };
@@ -467,6 +510,7 @@ rec {
         TERM = "tmux-256color";
         LANG = "en_US.UTF-8";
         VISUAL = "vim";
+        DISABLE_AUTO_TITLE = "true";
       };
 
       shellAliases = {
@@ -490,15 +534,20 @@ rec {
         source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
         # TMUX
-        if which tmux >/dev/null 2>&1; then
-          # if no session is started, start a new session
-          test -z $TMUX && tmux
+#        if which tmux >/dev/null 2>&1; then
+#          if no session is started, start a new session
+#          test -z $TMUX && tmux
+#
+#          when quitting tmux, try to attach
+#          while test -z $TMUX; do
+#           tmux attach || break
+#          done
+#        fi
 
-          # when quitting tmux, try to attach
-          while test -z $TMUX; do
-            tmux attach || break
-          done
-        fi
+        # If running from tty1 start sway
+         if [ "$(tty)" = "/dev/tty1" ]; then
+	         exec sway
+         fi
       '';
     };
 
@@ -635,17 +684,18 @@ rec {
 
 
   # xserver options
-  xresources.extraConfig = ''
-    Xft.dpi: 180
-    Xft.autohint: 0
-    Xft.lcdfilter:  lcddefault
-    Xft.hintstyle:  hintfull
-    Xft.hinting: 1
-    Xft.antialias: 1
-    Xft.rgba: rgb
-  '';
+  # xresources.extraConfig = ''
+  #   Xft.dpi: 180
+  #   Xft.autohint: 0
+  #   Xft.lcdfilter:  lcddefault
+  #   Xft.hintstyle:  hintfull
+  #   Xft.hinting: 1
+  #   Xft.antialias: 1
+  #   Xft.rgba: rgb
+  # '';
+
   xsession = {
-   enable = true;
+   enable = false;
    preferStatusNotifierItems = true;
    initExtra = ''
      xset r rate 200 30
@@ -655,7 +705,7 @@ rec {
      xinput set-prop "DELL0926:00 044E:1220 Mouse" "libinput Tapping Enabled Default" 0
    '';
    windowManager.xmonad = {
-     enable = true;
+     enable = false;
      enableContribAndExtras = true;
      extraPackages = (haskellPackages: [haskellPackages.taffybar]);
      config = ./configFiles/xmonad/xmonad.hs;

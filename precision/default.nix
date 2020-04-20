@@ -4,6 +4,12 @@
 
 { config, pkgs, ... }:
 
+let
+
+  wayland-pkgs = builtins.fetchGit {url = "https://github.com/colemickens/nixpkgs-wayland.git";};
+
+  in
+
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -30,7 +36,7 @@
         "hid_magicmouse.scroll_speed=55"
       ];
 
-      earlyVconsoleSetup = true;
+      #earlyVconsoleSetup = true;
   };
 
   powerManagement.powertop.enable = true;
@@ -58,16 +64,16 @@
       "https://cachix.cachix.org"
       "https://nixcache.reflex-frp.org"
       "https://hydra.iohk.io"
-      "http://hydra.qfpl.io"
-      "https://qfpl.cachix.org"
+      # "http://hydra.qfpl.io"
+      # "https://qfpl.cachix.org"
       "https://hie-nix.cachix.org"
     ];
     binaryCachePublicKeys = [
       "ryantrinkle.com-1:JJiAKaRv9mWgpVAz8dwewnZe0AzzEAzPkagE9SP5NWI="
-      "qfpl.io:xME0cdnyFcOlMD1nwmn6VrkkGgDNLLpMXoMYl58bz5g="
+      # "qfpl.io:xME0cdnyFcOlMD1nwmn6VrkkGgDNLLpMXoMYl58bz5g="
       "cachix.cachix.org-1:eWNHQldwUO7G2VkjpnjDbWwy4KQ/HNxht7H4SSoMckM="
       "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-      "qfpl.cachix.org-1:JTTxGW07zLPAGglHlMbMC3kQpCd6eFRgbtnuorCogYw="
+      # "qfpl.cachix.org-1:JTTxGW07zLPAGglHlMbMC3kQpCd6eFRgbtnuorCogYw="
       "hie-nix.cachix.org-1:EjBSHzF6VmDnzqlldGXbi0RM3HdjfTU3yDRi9Pd0jTY="
     ];
     trustedUsers = [ "root" "kaushik" ];
@@ -75,6 +81,10 @@
 
   nixpkgs = {
     config.allowUnfree = true;
+    config.pulseaudio = true;
+    overlays = [
+      (import "${wayland-pkgs}/default.nix")
+    ];
   };
 
   time = {
@@ -90,7 +100,6 @@
       enable = true;
       package = pkgs.bluezFull;
     };
-    brightnessctl.enable = true;
   };
 
   virtualisation.docker = {
@@ -98,9 +107,15 @@
   };
 
   i18n = {
-    consoleFont = "latarcyrheb-sun32";
-    consoleKeyMap = "us";
+    #consoleFont = "latarcyrheb-sun32";
+    #consoleKeyMap = "us";
     defaultLocale = "en_US.UTF-8";
+  };
+
+  console = {
+    keyMap = "us";
+    font = "latarcyrheb-sun32";
+    earlySetup = true;
   };
 
   fonts = {
@@ -111,7 +126,7 @@
       source-code-pro
       terminus_font
       fira-code
-      font-awesome_5
+      font-awesome
       liberation_ttf
       ubuntu_font_family
       powerline-fonts
@@ -159,9 +174,9 @@
       # videoDrivers = [ "amdgpu" ];
 
       # DPI
-      monitorSection = ''
-        DisplaySize 406 228
-      '';
+      # monitorSection = ''
+      #   DisplaySize 406 228
+      # '';
 
       # Enable touchpad support.
       libinput = {
@@ -170,63 +185,22 @@
         disableWhileTyping = true;
         accelSpeed = "0.9";
       };
-      windowManager.xmonad.enable = true;
 
+      #displayManager.extraSessionFilePackages = [ pkgs.sway ];
+      displayManager.sessionPackages = [ pkgs.sway ];
       displayManager = {
-        lightdm.enable = true;
-        # lightdm.greeters.pantheon.enable = true;
+        lightdm = {
+          enable = true;
+          greeters.pantheon.enable = true;
+        };
       };
-
-      # Enable the GNome Desktop Environment
-      # desktopManager = {
-      #   gnome3.enable = true;
-      #   xterm.enable = true;
-      #   default = "none";
-      # };
-
-      # displayManager = {
-      #   gdm.enable = true;
-
-      #   # only way to encode settings in gnome3, weird
-      #   sessionCommands = ''
-      #     dconf write /org/gnome/desktop/peripherals/keyboard/repeat-interval 'uint32 20'
-      #     dconf write /org/gnome/desktop/peripherals/keyboard/delay 'uint32 300'
-
-      #     dconf write /org/gnome/desktop/peripherals/touchpad/natural-scroll false
-
-      #     dconf write /org/gtk/settings/file-chooser/clock-format "'24h'"
-
-      #     dconf write /org/gnome/desktop/interface/gtk-key-theme "'Emacs'"
-      #     dconf write /org/gnome/desktop/interface/gtk-theme "'Adwaita-dark'"
-
-      #     dconf write /org/gnome/desktop/interface/monospace-font-name "'SF Mono 13'"
-      #     dconf write /org/gnome/desktop/interface/font-name "'SF Pro Display 13'"
-      #     dconf write /org/gnome/desktop/interface/document-font-name "'SF Pro Display Medium 13'"
-      #     dconf write /org/gnome/desktop/wm/preferences/titlebar-font "'SF Pro Display Bold 13'"
-      #     dconf write /org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/font "'SF Mono 14'"
-      #     dconf write /org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/audible-bell false
-
-      #     dconf write /org/gnome/desktop/input-sources/xkb-options  "['rupeesign:4', 'ctrl:nocaps', 'ctrl:swap_lalt_lctl_lwin']"
-
-
-      #     dconf write /org/gnome/desktop/wm/keybindings/switch-applications "['<Primary>Tab', '<Alt>Tab', '<Primary>Space']"
-      #     dconf write /org/gnome/desktop/wm/keybindings/switch-applications-backward "['<Primary><Shift>Tab', '<Alt><Shift>Tab', '<Primary><Shift>Space']"
-      #     dconf write /org/gnome/settings-daemon/plugins/media-keys/search "'<Alt>space'"
-      #     dconf write /org/gnome/desktop/wm/keybindings/switch-group "['<Primary>grave']"
-      #     dconf write /org/gnome/desktop/wm/keybindings/switch-group-backward "['<Primary><Shift>grave']"
-      #     dconf write /org/gnome/desktop/wm/keybindings/close "['<Alt>F4', '<Primary>q']"
-
-      #     dconf write /org/gnome/desktop/privacy/disable-camera true
-      #     dconf write /org/gnome/desktop/privacy/disable-microphone true
-      #     dconf write /org/gnome/desktop/privacy/remove-old-temp-files true
-      #     dconf write /org/gnome/desktop/privacy/remove-old-trash-files true
-      #   '';
-
-
-      # };
     };
 
-    zerotierone.enable = true;
+    zerotierone.enable = false;
+  };
+
+  systemd = {
+    packages = with pkgs.gnome3; [ gnome-session gnome-shell ];
   };
 
   environment = {
@@ -237,6 +211,7 @@
       VISUAL = "vim";
       XCURSOR_SIZE = "32";
     };
+    pathsToLink = [ "/home/kaushik/.gem/ruby/2.6.0/bin" ];
     systemPackages = with pkgs; [
       # Tools
       aspell
@@ -268,9 +243,13 @@
       wireshark
       pavucontrol
       lsof
+      mkvtoolnix
+      hpx
+      usbutils
 
       # Apps
       keybase-gui
+      firefox-wayland
 
       # X
       gnome-breeze
@@ -281,8 +260,8 @@
       xorg.xbacklight
 
       # Haskell Desktop
-      haskellPackages.gtk-sni-tray
-      haskellPackages.status-notifier-item
+      # haskellPackages.gtk-sni-tray
+      # haskellPackages.status-notifier-item
       haskellPackages.xmonad
       haskellPackages.dbus-hslogger
     ];
@@ -293,6 +272,40 @@
     zsh = {
       enable = true;
     };
+
+    sway = {
+      enable = true;
+      extraPackages = with pkgs; [
+        xwayland
+        swaylock
+        swayidle
+        termite
+        wofi
+        i3status
+        waybar
+        swaybg
+        mako
+        clipman
+        wlogout
+      ];
+      extraSessionCommands = ''
+        # Tell toolkits to use wayland
+        export CLUTTER_BACKEND=wayland
+        export QT_QPA_PLATFORM=wayland
+        export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
+        export SDL_VIDEODRIVER=wayland
+        export MOZ_ENABLE_WAYLAND=1
+        export MOZ_DBUS_REMOTE=1
+        export _JAVA_AWT_WM_NONREPARENTING=1
+
+        # Disable HiDPI scaling for X apps
+        # https://wiki.archlinux.org/index.php/HiDPI#GUI_toolkits
+        export GDK_SCALE=2
+        # export QT_SCREEN_SCALE_FACTORS="2;2"
+        export QT_FONT_DPI=96
+        # export QT_AUTO_SCREEN_SCALE_FACTOR=0
+      '';
+    };
   };
 
   users.users.kaushik = {
@@ -300,7 +313,7 @@
      shell = pkgs.zsh;
      uid = 1000;
      initialHashedPassword = "";
-     extraGroups = [ "wheel" "networkmanager" "video" "audio" "disk" ];
+     extraGroups = [ "wheel" "networkmanager" "video" "audio" "disk" "sway" ];
   };
 
 
