@@ -152,7 +152,7 @@ in rec {
         :dis-proxy() {
         sed -i ''' 's/proxy={enable=[^;]*/proxy={enable=false/' ${xdg.dataHome}/localconfig/default.nix
           home-switch
-        } 
+        }
       '';
 
       initExtra = ''
