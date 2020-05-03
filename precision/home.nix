@@ -18,6 +18,11 @@ let
   fzf_g = "https://raw.githubusercontent.com/LnL7/nix-darwin/master/modules/programs/zsh/fzf-git.zsh";
   fzf_h = "https://raw.githubusercontent.com/LnL7/nix-darwin/master/modules/programs/zsh/fzf-history.zsh";
 
+  doom-emacs = pkgs.callPackage (builtins.fetchTarball {
+    url = https://github.com/vlaci/nix-doom-emacs/archive/master.tar.gz;
+  }) {
+    doomPrivateDir = ../dot-emacs/doom-config;
+  };
 
 in
 
@@ -51,6 +56,7 @@ rec {
   };
 
   home = {
+    stateVersion = "19.09";
     sessionVariables = {
       EDITOR = "vim";
       VISUAL = "vim";
@@ -58,6 +64,7 @@ rec {
       LC_CTYPE = "en_US.UTF-8";
       TERM = "tmux-256color";
       LANG = "en_US.UTF-8";
+      PATH = "$PATH:$HOME/.emacs.d/bin";
     };
 
 
@@ -66,15 +73,12 @@ rec {
       ".config/waybar/config".source = "${nix_config_dir}/precision/configFiles/waybar.config";
       ".config/waybar/style.css".source = "${nix_config_dir}/precision/configFiles/waybar.css";
       "bin" = {source = ./bin; recursive = true;};
-      ".spacemacs".source = "${nix_config_dir}/dot-emacs/spacemacs";
-      # ".emacs.d" = {
-      #   source = pkgs.spacemacs;
+      # ".spacemacs".source = "${nix_config_dir}/dot-emacs/spacemacs";
+
+      # "${xdg.dataHome}/spacemacs/private" = {
+      #   source = "${nix_config_dir}/dot-emacs/spacemacs-private";
       #   recursive = true;
       # };
-      "${xdg.dataHome}/spacemacs/private" = {
-        source = "${nix_config_dir}/dot-emacs/spacemacs-private";
-        recursive = true;
-      };
       # ".xmonad/xmonad.hs".source = "${nix_config_dir}/precision/configFiles/xmonad/xmonad.hs";
       ".config/taffybar/taffybar.hs" = {
         source = "${nix_config_dir}/precision/configFiles/xmonad/taffybar.hs";
@@ -121,6 +125,12 @@ rec {
       '';
       ".config/rofi/lib/calc.la".source = "${pkgs.rofi-calc}/libs/calc.la";
       ".config/rofi/lib/calc.so".source = "${pkgs.rofi-calc}/libs/calc.so";
+
+      # ".emacs.d/init.el".text = ''
+      #   (load "default.el")
+      # '';
+
+      ".doom.d".source = ~/src/ops/nix-config/dot-emacs/doom-config;
     };
 
     packages = with pkgs; [
@@ -155,6 +165,8 @@ rec {
       kleopatra ## GnuPG UI client
       xfce.thunar ## files manager UI
       libreoffice
+
+      # doom-emacs
 
       ## DEV
       nixfmt
@@ -400,6 +412,7 @@ rec {
         l          = "log --graph --pretty=format:'%Cred%h%Creset"
                    + " —%Cblue%d%Creset %s %Cgreen(%cr)%Creset'"
                    + " --abbrev-commit --date=relative --show-notes=*";
+        gs         = "!git pull & git commit -a -m \"updates\" & git pull";
       };
 
       extraConfig = {
@@ -534,15 +547,15 @@ rec {
         source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
         # TMUX
-#        if which tmux >/dev/null 2>&1; then
-#          if no session is started, start a new session
-#          test -z $TMUX && tmux
-#
-#          when quitting tmux, try to attach
-#          while test -z $TMUX; do
-#           tmux attach || break
-#          done
-#        fi
+       if which tmux >/dev/null 2>&1; then
+         # if no session is started, start a new session
+         test -z $TMUX && tmux new-session
+
+         # when quitting tmux, try to attach
+         while test -z $TMUX; do
+          tmux attach || break
+         done
+       fi
 
         # If running from tty1 start sway
          if [ "$(tty)" = "/dev/tty1" ]; then
@@ -573,15 +586,15 @@ rec {
         set-option -g default-shell ${pkgs.zsh}/bin/zsh
 
         # rebind global key
-        # unbind-key C-b
-        # set-option -g prefix C-m
-        # bind-key C-m send-prefix
+        unbind-key C-b
+        set-option -g prefix M-m
+        bind-key M-m send-prefix
 
         bind 0 set status
         bind S choose-session
 
         # bind key to update tmux config
-        bind-key R source-file ${home_dir}/.tmux.conf ; display-message "tmux REFRESHED!!"
+        # bind-key R source-file ${home_dir}/.tmux.conf ; display-message "tmux REFRESHED!!"
 
         # y and p as in vim
         bind Escape copy-mode
@@ -628,15 +641,15 @@ rec {
 
         #  modes
         setw -g clock-mode-colour colour5
-        setw -g mode-attr bold
-        setw -g mode-fg colour1
-        setw -g mode-bg colour18
+        # setw -g mode-attr bold
+        # setw -g mode-fg colour1
+        # setw -g mode-bg colour18
 
         # panes
-        set -g pane-border-bg colour0
-        set -g pane-border-fg colour19
-        set -g pane-active-border-bg colour0
-        set -g pane-active-border-fg colour9
+        # set -g pane-border-bg colour0
+        # set -g pane-border-fg colour19
+        # set -g pane-active-border-bg colour0
+        # set -g pane-active-border-fg colour9
 
         # statusbar
         set -g status-position bottom
@@ -645,7 +658,7 @@ rec {
         set -g status-bg colour59
 
         set -g status-fg colour137
-        set -g status-attr dim
+        # set -g status-attr dim
         set -g status-left ' '
 
         set -g status-right '  #[fg=colour233,bg=colour58,bold] #(hostname) #[fg=colour233,bg=colour62,bold] %m/%d %H:%M  '
@@ -653,28 +666,28 @@ rec {
         set -g status-right-length 50
         # set -g status-left-length 20
 
-        setw -g window-status-current-fg colour1
+        # setw -g window-status-current-fg colour1
 
-        setw -g window-status-current-bg colour58
+        # setw -g window-status-current-bg colour58
 
-        setw -g window-status-current-attr bold
+        # setw -g window-status-current-attr bold
         setw -g window-status-current-format ' #I#[fg=colour249]:#[fg=colour255]#W#[fg=colour249]#F '
 
-        setw -g window-status-fg colour9
+        # setw -g window-status-fg colour9
 
-        setw -g window-status-bg colour60
+        # setw -g window-status-bg colour60
 
-        setw -g window-status-attr none
+        # setw -g window-status-attr none
         setw -g window-status-format ' #I#[fg=colour237]:#[fg=colour250]#W#[fg=colour244]#F '
 
-        setw -g window-status-bell-attr bold
-        setw -g window-status-bell-fg colour255
-        setw -g window-status-bell-bg colour1
+        # setw -g window-status-bell-attr bold
+        # setw -g window-status-bell-fg colour255
+        # setw -g window-status-bell-bg colour1
 
         # messages
-        set -g message-attr bold
-        set -g message-fg colour231
-        set -g message-bg colour58
+        # set -g message-attr bold
+        # set -g message-fg colour231
+        # set -g message-bg colour58
 
     '';
     };

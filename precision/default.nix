@@ -211,7 +211,6 @@ let
       VISUAL = "vim";
       XCURSOR_SIZE = "32";
     };
-    pathsToLink = [ "/home/kaushik/.gem/ruby/2.6.0/bin" ];
     systemPackages = with pkgs; [
       # Tools
       aspell
@@ -246,6 +245,12 @@ let
       mkvtoolnix
       hpx
       usbutils
+      ripgrep
+      fd
+      clang
+      coreutils
+
+      nix-prefetch-github
 
       # Apps
       keybase-gui
