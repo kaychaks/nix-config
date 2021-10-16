@@ -1,1 +1,4 @@
 /result*
+**/zsh/.zcompdump*
+**/zsh/#*
+**/zsh/history
