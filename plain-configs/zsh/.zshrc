@@ -1,4 +1,4 @@
-export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:~/.emacs.d/bin
 
 export PKG_CONFIG_PATH=/usr/local/opt/zlib/lib/pkgconfig:/usr/local/opt/libedit/lib/pkgconfig:/usr/local/opt/zlib/lib/pkgconfig:$PKG_CONFIG_PATH
 
@@ -66,7 +66,14 @@ if test -f /etc/zshrc.local; then
 fi
 
 # Aliases
-alias l="ls -lah --color=auto -F";
-alias ll="ls -lh --color=auto -F";
-alias la="ls -lAh --color=auto -F";
+alias l="exa -l";
+alias ll="exa -la";
+alias la="exa -laa";
 alias d="dirs -v | head -10";
+
+# nvm
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+
+# nix
+. ~/.nix-profile/etc/profile.d/nix.sh

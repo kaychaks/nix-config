@@ -68,7 +68,7 @@ export ZSH="/home/kc/.oh-my-zsh"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git docker dotenv docker-compose fzf npm osx vscode tmux xcode brew cabal emacs mvn gradle yarn warhol)
+plugins=(git docker dotenv docker-compose fzf npm macos vscode tmux xcode brew cabal emacs mvn gradle yarn warhol zsh-autosuggestions)
 
 source $ZSH/oh-my-zsh.sh
 
