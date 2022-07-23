@@ -2,7 +2,7 @@ export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/ga
 
 export PKG_CONFIG_PATH=/usr/local/opt/zlib/lib/pkgconfig:/usr/local/opt/libedit/lib/pkgconfig:/usr/local/opt/zlib/lib/pkgconfig:$PKG_CONFIG_PATH
 
-source /home/kc/.config/zsh/.zshrc-omz
+source $HOME/.config/zsh/.zshrc-omz
 
 # ENV VARIABLES
 export LC_CTYPE="en_US.UTF-8";
@@ -14,7 +14,7 @@ export CPPFLAGS="-I/usr/local/opt/ruby/include"
 
 HISTSIZE="50000"
 SAVEHIST="500000"
-HISTFILE="/home/kc/.config/zsh/history"
+HISTFILE="$HOME/.config/zsh/history"
 mkdir -p `(dirname "$HISTFILE")`
 
 
@@ -35,8 +35,8 @@ take() {
     rm -f .direnv/dump-* && direnv reload
 }
 :s() {
-    source '/home/kc/config/zsh/.zprofile'
-    source '/home/kc/.config/zsh/.zshrc'
+    source '$HOME/config/zsh/.zprofile'
+    source '$HOME/.config/zsh/.zshrc'
 }
 
 autoload -U promptinit && promptinit
@@ -56,9 +56,9 @@ bindkey '^[[A' up-line-or-beginning-search
 zle -N down-line-or-beginning-search
 zle -N up-line-or-beginning-search
 
-source '/home/kc/.config/zsh/fzf-completion.zsh'
-source '/home/kc/.config/zsh/fzf-git.zsh'
-source '/home/kc/.config/zsh/fzf-history.zsh'
+source "$HOME/.config/zsh/fzf-completion.zsh"
+source "$HOME/.config/zsh/fzf-git.zsh"
+source "$HOME/.config/zsh/fzf-history.zsh"
 
 # Read system-wide modifications.
 if test -f /etc/zshrc.local; then
@@ -70,10 +70,16 @@ alias l="exa -l";
 alias ll="exa -la";
 alias la="exa -laa";
 alias d="dirs -v | head -10";
+alias vi=nvim;
+alias vim=nvim;
 
 # nvm
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+[ -s "/usr/local/opt/nvm/nvm.sh" ] && \. "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
-# nix
-. ~/.nix-profile/etc/profile.d/nix.sh
+# rust
+. "$HOME/.cargo/env"
+
+# direnv
+eval "$(direnv hook zsh)"
