@@ -2,17 +2,20 @@ env:
   TERM: alacritty
   COLORTERM: truecolor
 
+
 shell:
-  program: /usr/local/bin/fish
+  program: fish
   args:
     - -l
     - -c
     - tmux attach || tmux
+
 grep_after: 6
 
 window:
   dynamic_padding: true
   startup_mode: Maximized
+  decorations: none
   padding:
     x: 10
     y: 10
@@ -35,14 +38,12 @@ font:
     family: PragmataPro Liga
     face: Bold Italic
 
-  size: 16.0
+  size: 14.0
 
 
   use_thin_strokes: true
 
 draw_bold_text_with_bright_colors: true
-
-working_directory: /Users/kaushikchakraborty/Dev/
 
 selection:
   semantic_escape_chars: ",│`|:\"' ()[]{}<>\t"
@@ -173,26 +174,26 @@ key_bindings:
   - { key: Return, mods: Shift,   mode: Search|~Vi, action: SearchFocusPrevious   }
 
   # (macOS only)
-  - { key: K,              mods: Command, mode: ~Vi|~Search, chars: "\x0c"                 }
-  - { key: K,              mods: Command, mode: ~Vi|~Search, action: ClearHistory          }
-  - { key: Key0,           mods: Command,                    action: ResetFontSize         }
-  - { key: Equals,         mods: Command,                    action: IncreaseFontSize      }
-  - { key: Plus,           mods: Command,                    action: IncreaseFontSize      }
-  - { key: NumpadAdd,      mods: Command,                    action: IncreaseFontSize      }
-  - { key: Minus,          mods: Command,                    action: DecreaseFontSize      }
-  - { key: NumpadSubtract, mods: Command,                    action: DecreaseFontSize      }
-  - { key: V,              mods: Command,                    action: Paste                 }
-  - { key: C,              mods: Command,                    action: Copy                  }
-  - { key: C,              mods: Command, mode: Vi|~Search,  action: ClearSelection        }
-  - { key: H,              mods: Command,                    action: Hide                  }
-  - { key: H,              mods: Command|Alt,                action: HideOtherApplications }
-  - { key: M,              mods: Command,                    action: Minimize              }
-  - { key: Q,              mods: Command,                    action: Quit                  }
-  - { key: W,              mods: Command,                    action: Quit                  }
-  - { key: N,              mods: Command,                    action: SpawnNewInstance      }
-  - { key: F,              mods: Command|Control,            action: ToggleFullscreen      }
-  - { key: F,              mods: Command, mode: ~Search,     action: SearchForward         }
-  - { key: B,              mods: Command, mode: ~Search,     action: SearchBackward        }
+  #  - { key: K,              mods: Command, mode: ~Vi|~Search, chars: "\x0c"                 }
+  #  - { key: K,              mods: Command, mode: ~Vi|~Search, action: ClearHistory          }
+  #  - { key: Key0,           mods: Command,                    action: ResetFontSize         }
+  #  - { key: Equals,         mods: Command,                    action: IncreaseFontSize      }
+  #  - { key: Plus,           mods: Command,                    action: IncreaseFontSize      }
+  #  - { key: NumpadAdd,      mods: Command,                    action: IncreaseFontSize      }
+  #  - { key: Minus,          mods: Command,                    action: DecreaseFontSize      }
+  #  - { key: NumpadSubtract, mods: Command,                    action: DecreaseFontSize      }
+  #  - { key: V,              mods: Command,                    action: Paste                 }
+  #  - { key: C,              mods: Command,                    action: Copy                  }
+  #  - { key: C,              mods: Command, mode: Vi|~Search,  action: ClearSelection        }
+  #  - { key: H,              mods: Command,                    action: Hide                  }
+  #  - { key: H,              mods: Command|Alt,                action: HideOtherApplications }
+  #  - { key: M,              mods: Command,                    action: Minimize              }
+  #  - { key: Q,              mods: Command,                    action: Quit                  }
+  #  - { key: W,              mods: Command,                    action: Quit                  }
+  #  - { key: N,              mods: Command,                    action: SpawnNewInstance      }
+  #  - { key: F,              mods: Command|Control,            action: ToggleFullscreen      }
+  #  - { key: F,              mods: Command, mode: ~Search,     action: SearchForward         }
+  #  - { key: B,              mods: Command, mode: ~Search,     action: SearchBackward        }
 
 # custom
 #- { key: M,              mods: Alt,     chars: "\x1bm"        }
