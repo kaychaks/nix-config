@@ -1,6 +1,6 @@
-[submodule "home-manager"]
-	path = home-manager
-	url = https://github.com/kaychaks/home-manager.git
 [submodule "dot-emacs"]
 	path = dot-emacs
 	url = https://github.com/kaychaks/dot-emacs.git
+[submodule "dot-vim"]
+	path = dot-vim
+	url = https://github.com/kaychaks/dot-vim.git

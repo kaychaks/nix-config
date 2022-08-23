@@ -25,7 +25,8 @@ in rec {
 
     overlays = [
       (import ../overlays/01-nix-scripts.nix)
-      (import ../overlays/10-emacs.nix)
+      (import ../overlays/11-spacemacs)
+      # (import "/Users/kaushik/Developer/src/personal/nix-config/overlays/11-doom")
     ];
   };
 
@@ -39,6 +40,14 @@ in rec {
        '';
 
        ".spacemacs".source = ../dot-emacs/spacemacs;
+       #".emacs.d" = {
+       #  source = pkgs.spacemacs;
+       #  recursive = true;
+       #};
+       # ".emacs.d" = {
+       #   source = pkgs.emacs-doom;
+       #   recursive = true;
+       # };
 
       "${xdg.dataHome}/spacemacs/private".source = ../dot-emacs/spacemacs-private;
 
@@ -143,7 +152,7 @@ in rec {
         :dis-proxy() {
         sed -i ''' 's/proxy={enable=[^;]*/proxy={enable=false/' ${xdg.dataHome}/localconfig/default.nix
           home-switch
-        } 
+        }
       '';
 
       initExtra = ''

@@ -21,9 +21,11 @@ in
   aspellDicts.en
   vim
   emacs26
-  texlive.combined.scheme-full
+#  texlive.combined.scheme-full
   VSCode
   # Alfred
+  multimarkdown
+  pandoc
 
   # system
   htop
@@ -39,12 +41,13 @@ in
   gnutar
   watchman
   nix-prefetch-git
+  clang
+  fd
 
   # networking
   openssl
   youtube-dl
   ffmpeg
-  pandoc
   curl
   wget
   rsync
@@ -73,10 +76,20 @@ in
   sbt-extras
   jdk
 
+
   nodejs_latest
+  # nodejs-12_x
   nodePackages.node2nix
   nodePackages.eslint
+  nodePackages.prettier
+  nodePackages.tern
+  nodePackages.typescript-language-server
+  nodePackages.typescript
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
   (exe haskellPackages.cabal-install)
   (exe haskellPackages.cabal2nix)
   (exe haskellPackages.fast-tags)

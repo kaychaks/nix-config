@@ -1,5 +1,6 @@
-{ config, pkgs, ... }:
+{ pkgs, config, lib, ... }:
 
+<<<<<<< HEAD
 let
   user = "kaushik";
   home_dir = "/home/${user}";
@@ -13,6 +14,10 @@ let
     $DRY_RUN_CMD rm -fr $HOME/.cache/taffybar/
     $DRY_RUN_CMD systemctl --user restart taffybar.service
   '';
+=======
+let 
+  dconf_settings = import ./dconf.nix;
+>>>>>>> master
 
   fzf_c = "https://raw.githubusercontent.com/LnL7/nix-darwin/master/modules/programs/zsh/fzf-completion.zsh";
   fzf_g = "https://raw.githubusercontent.com/LnL7/nix-darwin/master/modules/programs/zsh/fzf-git.zsh";
@@ -26,12 +31,46 @@ let
 
 in
 
-rec {
-  nixpkgs = {
-    config = {
-      allowUnfree = true;
-      allowBroken = false;
+{
+  xdg.configFile."alacritty/alacritty.yml".source = /home/kaushik/Dev/nix-config/plain-configs/alacritty/alacritty.yml; 
+  home.file.".tmux.conf".source = /home/kaushik/Dev/nix-config/plain-configs/tmux/tmux.conf;
+
+  # gnome settings are imported from dconf. this file is generated with command
+  # dconf dump / | dconf2nix | sudo tee /etc/nixos/dconf.nix
+  # install dconf2nix - nix-env -i dconf2nix
+  # ref: https://gvolpe.com/blog/gnome3-on-nixos/
+#  imports = [ ./dconf.nix ];
+
+  nixpkgs.config.allowUnfree = true;
+
+  home.packages = with pkgs; [
+    gnome.gnome-shell-extensions
+    gnome.gnome-tweaks
+
+    gnomeExtensions.appindicator
+    gnomeExtensions.pop-shell
+
+    tmuxPlugins.continuum
+    tmuxPlugins.logging
+    tmuxPlugins.resurrect
+    tmuxPlugins.sidebar
+    tmuxPlugins.urlview
+    tmuxPlugins.yank
+
+    rustup
+    rust-analyzer
+
+    github-desktop
+    #firefox-wayland
+  ];
+  gtk.enable = true;
+
+  services = {
+    gpg-agent = {
+      enable = true;
+      enableFishIntegration = true;
     };
+<<<<<<< HEAD
 
     overlays = [
 #      (import "${nix_config_dir}/overlays/10-emacs.nix")
@@ -41,11 +80,13 @@ rec {
       (import "${nix_config_dir}/overlays/20-rofi-calc.nix")
       # (import "${nix_config_dir}/precision/configFiles/taffybar/environment.nix")
     ];
+=======
+>>>>>>> master
   };
-
 
   xdg = {
     enable = true;
+<<<<<<< HEAD
     dataHome = "${home_dir}/.local/share";
     cacheHome = "${home_dir}/.cache";
     configHome = "${home_dir}/.config";
@@ -203,11 +244,20 @@ rec {
     screen-locker = {
       enable = false;
       lockCmd = "betterlockscreen -l dim";
+=======
+  };
+
+
+  dconf.settings = (dconf_settings {lib = lib;}).dconf.settings // {
+    "org/gnome/desktop/wm/keybindings" = {
+      switch-applications = [ "<Super>Tab" "<Alt>Tab" "<Super>space"];
+>>>>>>> master
     };
 
   };
 
   programs = {
+<<<<<<< HEAD
     autorandr = {
       enable = true;
       hooks.postswitch = {
@@ -289,20 +339,31 @@ rec {
 
     home-manager.enable = true;
 
+=======
+    autojump.enable = true;
+    htop.enable = true;
+    jq.enable = true;
+    tmux.enable = true;
+    vscode.enable = true;
+    firefox.enable = true;
+    alacritty.enable = true;
+>>>>>>> master
     gpg.enable = true;
-
-    emacs = {
+    fish = {
       enable = true;
+<<<<<<< HEAD
       package = pkgs.emacs.override { inherit (pkgs) imagemagick; };
     };
 
     vscode = {
       enable = true;
       package = pkgs.vscodium;
+=======
+>>>>>>> master
     };
-
-    termite = {
+    starship = {
       enable = true;
+<<<<<<< HEAD
       allowBold = true;
       font = "SF Mono 12";
       backgroundColor = "rgba(0, 43, 54)";
@@ -350,18 +411,15 @@ rec {
         color20 = #839496
         color21 = #eee8d5
       '';
+=======
+      enableFishIntegration = true;
+>>>>>>> master
     };
-
-    direnv = {
-      enable = true;
-      enableBashIntegration = true;
-      enableZshIntegration = true;
-    };
-
     fzf = {
       enable = true;
-      enableZshIntegration = true;
+      enableFishIntegration = true;
     };
+<<<<<<< HEAD
 
     vim = {
       enable = true;
@@ -390,12 +448,19 @@ rec {
       '';
     };
 
+=======
+    neovim = {
+      enable = true;
+    };
+    lazygit.enable = true;
+    gitui.enable = true;
+>>>>>>> master
     git = {
       enable = true;
-
       userName = "Kaushik Chakraborty";
       userEmail = "git@kaushikc.org";
 
+<<<<<<< HEAD
       aliases = {
         amend      = "commit --amend -C HEAD";
         b          = "branch --color -v";
@@ -415,6 +480,8 @@ rec {
         gs         = "!git pull & git commit -a -m \"updates\" & git pull";
       };
 
+=======
+>>>>>>> master
       extraConfig = {
         branch.autosetupmerge = true;
         github.user           = "kaychaks";
@@ -433,7 +500,9 @@ rec {
         submodule = {
           recurse = true;
         };
-      };
+
+        credential.helper = "!git-credential-1password";
+      };      
 
       signing = {
         signByDefault = false;
@@ -467,6 +536,7 @@ rec {
         "tags"
       ];
     };
+<<<<<<< HEAD
 
 
     ssh = {
@@ -745,4 +815,8 @@ rec {
   #       WantedBy = [ "default.target" ];
   #     };
   #   };
+=======
+  };
+
+>>>>>>> master
 }

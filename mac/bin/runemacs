@@ -1,3 +1,5 @@
 #!/bin/bash
 
-ls $TMPDIR/emacs$UID | grep -q server || ("$HOME/Applications/Nix Apps/Emacs.app/Contents/MacOS/Emacs" --daemon && emacsclient -qc "$@")
+# ls $TMPDIR/emacs$UID | grep -q server || ("$HOME/Applications/Nix Apps/Emacs.app/Contents/MacOS/Emacs" --daemon && emacsclient -qc "$@")
+
+ls $TMPDIR/emacs$UID | grep -q server || ("/Applications/Emacs.app/Contents/MacOS/Emacs" --daemon && emacsclient -qc "$@")
