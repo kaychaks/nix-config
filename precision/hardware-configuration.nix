@@ -8,59 +8,25 @@
     [ (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-<<<<<<< HEAD
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
-  boot.initrd.kernelModules = [ "dm-snapshot" ];
-=======
-  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "rtsx_pci_sdmmc" ];
   boot.initrd.kernelModules = [ ];
->>>>>>> master
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
-  boot.initrd.luks.devices = 
-  {
-    root = {
-      name = "root";
-      device = "/dev/nvme0n1p2";
-      preLVM = true;
-    };
-  };
-
   fileSystems."/" =
-<<<<<<< HEAD
-    { device = "/dev/disk/by-uuid/ce9ed1c0-d05b-4460-acb6-9d3f3857c9fa";
-      fsType = "btrfs";
-=======
-    { device = "/dev/disk/by-uuid/9e02fc72-fbec-409c-806e-eb41067d44db";
+    { device = "/dev/disk/by-uuid/3ed2721f-b611-4871-b970-60eacc3eac59";
       fsType = "ext4";
     };
 
-  boot.initrd.luks.devices."luks-1ef3982a-0bd2-44d2-9435-0505341e3716".device = "/dev/disk/by-uuid/1ef3982a-0bd2-44d2-9435-0505341e3716";
-
-  fileSystems."/nix/store" =
-    { device = "/nix/store";
-      fsType = "none";
-      options = [ "bind" ];
-    };
+  boot.initrd.luks.devices."luks-f9616f58-61bb-4ecd-a018-60184789bd76".device = "/dev/disk/by-uuid/f9616f58-61bb-4ecd-a018-60184789bd76";
 
   fileSystems."/boot/efi" =
-    { device = "/dev/disk/by-uuid/2E09-D1AE";
-      fsType = "vfat";
->>>>>>> master
-    };
-
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/A35C-7D5C";
+    { device = "/dev/disk/by-uuid/BF43-3838";
       fsType = "vfat";
     };
 
   swapDevices =
-<<<<<<< HEAD
-    [ { device = "/dev/disk/by-uuid/d67e6993-9399-444f-af49-e87f65d130c5"; }
-=======
-    [ { device = "/dev/disk/by-uuid/6f9dd312-cce5-4d2e-8fdc-4d42bb15e146"; }
->>>>>>> master
+    [ { device = "/dev/disk/by-uuid/0d3c883e-8ac7-482c-8546-ae93176c6518"; }
     ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
@@ -72,10 +38,7 @@
   # networking.interfaces.wlp111s0.useDHCP = lib.mkDefault true;
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
-<<<<<<< HEAD
-=======
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
   # high-resolution display
   hardware.video.hidpi.enable = lib.mkDefault true;
->>>>>>> master
 }

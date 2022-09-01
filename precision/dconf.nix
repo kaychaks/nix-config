@@ -5,13 +5,22 @@ with lib.hm.gvariant;
 
 {
   dconf.settings = {
+    "apps/seahorse/listing" = {
+      keyrings-selected = [ "secret-service:///org/freedesktop/secrets/collection/login" ];
+    };
+
+    "apps/seahorse/windows/key-manager" = {
+      height = 665;
+      width = 1038;
+    };
+
     "org/gnome/Console" = {
       theme = "night";
     };
 
     "org/gnome/control-center" = {
       last-panel = "keyboard";
-      window-state = mkTuple [ 948 1032 ];
+      window-state = mkTuple [ 980 640 ];
     };
 
     "org/gnome/desktop/app-folders" = {
@@ -49,6 +58,14 @@ with lib.hm.gvariant;
       application-children = [ "org-gnome-nautilus" "gnome-power-panel" "org-gnome-console" "firefox" ];
     };
 
+    "org/gnome/desktop/notifications/application/1password" = {
+      application-id = "1password.desktop";
+    };
+
+    "org/gnome/desktop/notifications/application/alacritty" = {
+      application-id = "Alacritty.desktop";
+    };
+
     "org/gnome/desktop/notifications/application/firefox" = {
       application-id = "firefox.desktop";
     };
@@ -59,6 +76,10 @@ with lib.hm.gvariant;
 
     "org/gnome/desktop/notifications/application/org-gnome-console" = {
       application-id = "org.gnome.Console.desktop";
+    };
+
+    "org/gnome/desktop/notifications/application/org-gnome-fileroller" = {
+      application-id = "org.gnome.FileRoller.desktop";
     };
 
     "org/gnome/desktop/notifications/application/org-gnome-nautilus" = {
@@ -96,34 +117,12 @@ with lib.hm.gvariant;
     };
 
     "org/gnome/desktop/wm/keybindings" = {
-      close = [ "<Super>q" "<Alt>F4" ];
-      maximize = [];
-      minimize = [];
-      move-to-monitor-down = [];
-      move-to-monitor-left = [];
-      move-to-monitor-right = [];
-      move-to-monitor-up = [];
-      move-to-workspace-1 = [ "<Super><Shift>1" ];
-      move-to-workspace-2 = [ "<Super><Shift>2" ];
-      move-to-workspace-3 = [ "<Super><Shift>3" ];
-      move-to-workspace-4 = [ "<Super><Shift>4" ];
-      move-to-workspace-down = [ "<Super><Shift>Down" "<Super><Shift>j" ];
-      move-to-workspace-left = [ "<Super><Shift>Left" "<Super><Shift>l" ];
-      move-to-workspace-right = [ "<Super><Shift>Right" "<Super><Shift>h" ];
-      move-to-workspace-up = [ "<Super><Shift>Up" "<Super><Shift>k" ];
-      switch-applications = [ "<Super>Tab" "<Alt>Tab" "<Super>space" ];
+      close = [ "<Super>q" ];
+      maximize = [ "<Super>m" ];
+      switch-applications = [ "<Alt>space" "<Alt>Tab" ];
+      switch-applications-backward = [ "<Shift><Alt>Tab" ];
       switch-input-source = [];
       switch-input-source-backward = [];
-      switch-to-workspace-1 = [ "<Super>1" ];
-      switch-to-workspace-2 = [ "<Super>2" ];
-      switch-to-workspace-3 = [ "<Super>3" ];
-      switch-to-workspace-4 = [ "<Super>4" ];
-      switch-to-workspace-down = [ "<Primary><Super>Down" "<Primary><Super>j" ];
-      switch-to-workspace-left = [ "<Primary><Super>Left" "<Primary><Super>l" ];
-      switch-to-workspace-right = [ "<Primary><Super>Right" "<Primary><Super>h" ];
-      switch-to-workspace-up = [ "<Primary><Super>Up" "<Primary><Super>k" ];
-      toggle-maximized = [ "<Super>m" ];
-      unmaximize = [];
     };
 
     "org/gnome/desktop/wm/preferences" = {
@@ -143,6 +142,25 @@ with lib.hm.gvariant;
       network-monitor-gio-name = "";
     };
 
+    "org/gnome/file-roller/dialogs/extract" = {
+      recreate-folders = true;
+      skip-newer = false;
+    };
+
+    "org/gnome/file-roller/listing" = {
+      list-mode = "as-folder";
+      name-column-width = 250;
+      show-path = false;
+      sort-method = "name";
+      sort-type = "ascending";
+    };
+
+    "org/gnome/file-roller/ui" = {
+      sidebar-width = 200;
+      window-height = 480;
+      window-width = 600;
+    };
+
     "org/gnome/font-manager/font-viewer" = {
       window-position = mkTuple [ 26 23 ];
       window-size = mkTuple [ 546 299 ];
@@ -154,6 +172,7 @@ with lib.hm.gvariant;
       dynamic-workspaces = false;
       edge-tiling = true;
       focus-change-on-pointer-rest = false;
+      overlay-key = "Super_R";
       workspaces-only-on-primary = true;
     };
 
@@ -169,6 +188,7 @@ with lib.hm.gvariant;
     "org/gnome/nautilus/preferences" = {
       default-folder-viewer = "list-view";
       search-filter-time-type = "last_modified";
+      search-view = "list-view";
     };
 
     "org/gnome/nautilus/window-state" = {
@@ -181,7 +201,7 @@ with lib.hm.gvariant;
     };
 
     "org/gnome/settings-daemon/plugins/media-keys" = {
-      custom-keybindings = [ "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/" ];
+      custom-keybindings = [ "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/" "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/" ];
       email = [];
       home = [ "<Super>e" ];
       rotate-video-lock-static = [];
@@ -196,6 +216,12 @@ with lib.hm.gvariant;
       name = "Open Alacritty";
     };
 
+    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
+      binding = "<Control><Super>space";
+      command = "1password";
+      name = "1Password";
+    };
+
     "org/gnome/settings-daemon/plugins/power" = {
       power-button-action = "nothing";
     };
@@ -204,6 +230,7 @@ with lib.hm.gvariant;
       disable-user-extensions = false;
       disabled-extensions = [];
       enabled-extensions = [ "pop-shell@system76.com" ];
+      favorite-apps = [ "org.gnome.Calendar.desktop" "org.gnome.Nautilus.desktop" "firefox.desktop" "org.gnome.Settings.desktop" "Alacritty.desktop" "logseq.desktop" "code.desktop" ];
       welcome-dialog-last-shown-version = "42.3.1";
     };
 
@@ -228,7 +255,6 @@ with lib.hm.gvariant;
       switch-to-application-8 = [];
       switch-to-application-9 = [];
       toggle-message-tray = [ "<Super>v" ];
-      toggle-overview = [];
     };
 
     "org/gnome/shell/world-clocks" = {
