@@ -5,11 +5,10 @@
 { config, pkgs, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      <home-manager/nixos>
-    ];
+  imports = [ # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+    <home-manager/nixos>
+  ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -17,13 +16,13 @@
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
 
   # Setup keyfile
-  boot.initrd.secrets = {
-    "/crypto_keyfile.bin" = null;
-  };
+  boot.initrd.secrets = { "/crypto_keyfile.bin" = null; };
 
   # Enable swap on luks
-  boot.initrd.luks.devices."luks-096c1bc0-8d6c-4350-a0d7-cc5f8afe5995".device = "/dev/disk/by-uuid/096c1bc0-8d6c-4350-a0d7-cc5f8afe5995";
-  boot.initrd.luks.devices."luks-096c1bc0-8d6c-4350-a0d7-cc5f8afe5995".keyFile = "/crypto_keyfile.bin";
+  boot.initrd.luks.devices."luks-096c1bc0-8d6c-4350-a0d7-cc5f8afe5995".device =
+    "/dev/disk/by-uuid/096c1bc0-8d6c-4350-a0d7-cc5f8afe5995";
+  boot.initrd.luks.devices."luks-096c1bc0-8d6c-4350-a0d7-cc5f8afe5995".keyFile =
+    "/crypto_keyfile.bin";
 
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -39,7 +38,13 @@
   time.timeZone = "Asia/Kolkata";
 
   # Select internationalisation properties.
-  i18n.defaultLocale = "en_IN.utf8";
+  i18n.defaultLocale = "en_US.UTF-8";
+  i18n.extraLocaleSettings = {
+    LC_CTYPE = "en_US.UTF-8";
+    LC_ALL = "en_US.UTF-8";
+    LANG = "en_US.UTF-8";
+    LANGUAGE = "en_US.UTF-8";
+  };
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
@@ -77,25 +82,41 @@
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
+  # Enable GlobalProtect VPN (for work)
+  services.globalprotect = {
+    enable = true;
+    # if you need a Host Integrity Protection report
+    csdWrapper = "${pkgs.openconnect}/libexec/openconnect/hipreport.sh";
+  };
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.kaushik = {
 
     isNormalUser = true;
     description = "Kaushik Chakraborty";
-    extraGroups = [ "networkmanager" "wheel" "video" "audio" "disk" "systemd-journal" ];
+    extraGroups =
+      [ "networkmanager" "wheel" "video" "audio" "disk" "systemd-journal" ];
     useDefaultShell = true;
-    packages = with pkgs; [
-      firefox
-    #  thunderbird
-    ];
-  };   
+    packages = with pkgs;
+      [
+        firefox
+        #  thunderbird
+      ];
+  };
 
-  users.defaultUserShell = pkgs.fish; 
+  users.defaultUserShell = pkgs.fish;
 
   home-manager.users.kaushik = import ./home.nix;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
+
+  environment.variables = {
+    LC_CTYPE = "en_US.UTF-8";
+    TERM = "alacritty";
+    LANG = "en_US.UTF-8";
+    VISUAL = "vim";
+  };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -109,6 +130,8 @@
     fish
     gcc
     clang
+    globalprotect-openconnect
+    gnomeExtensions.appindicator
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -130,11 +153,7 @@
   # services.openssh.enable = true;
 
   services.gnome.core-utilities.enable = true;
-  security.pam = {
-    services.gdm = {
-      enableGnomeKeyring = true;
-    };
-  };
+  security.pam = { services.gdm = { enableGnomeKeyring = true; }; };
   services.udev.packages = with pkgs; [ gnome.gnome-settings-daemon ];
   services.dbus.packages = [ pkgs.dconf ];
 

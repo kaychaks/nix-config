@@ -6,21 +6,32 @@ let
   nix_config_dir = "${home_dir}/Dev/nix-config";
   dconf_settings = import ./dconf.nix;
   nixpkgs = import <nixpkgs> { config = { allowUnfree = true; }; };
-in
 
-
-{
-  xdg.configFile."alacritty/alacritty.yml".source = "${nix_config_dir}/plain-configs/alacritty/alacritty.yml"; 
-  home.file.".tmux.conf".source = "${nix_config_dir}/plain-configs/tmux/tmux.conf";
-  xdg.configFile."starship.toml".source = "${nix_config_dir}/plain-configs/starship.toml";
+in {
+  xdg.configFile."alacritty/alacritty.yml".source =
+    "${nix_config_dir}/plain-configs/alacritty/alacritty.yml";
+  home.file.".tmux.conf".source =
+    "${nix_config_dir}/plain-configs/tmux/tmux.conf";
+  xdg.configFile."starship.toml".source =
+    "${nix_config_dir}/plain-configs/starship.toml";
 
   # gnome settings are imported from dconf. this file is generated with command
   # dconf dump / | dconf2nix | sudo tee /etc/nixos/dconf.nix
   # install dconf2nix - nix-env -i dconf2nix
   # ref: https://gvolpe.com/blog/gnome3-on-nixos/
-#  imports = [ ./dconf.nix ];
+  #  imports = [ ./dconf.nix ];
 
   nixpkgs.config.allowUnfree = true;
+
+  home.sessionVariables = {
+    EDITOR = "vim";
+    VISUAL = "vim";
+    BROWSER = "firefox";
+    LC_CTYPE = "en_US.UTF-8";
+    LC_ALL = "en_US.UTF-8";
+    TERM = "alacritty";
+    LANG = "en_US.UTF-8";
+  };
 
   home.packages = with pkgs; [
     gnome.gnome-shell-extensions
@@ -46,7 +57,6 @@ in
 
     logseq
 
-
     nixpkgs._1password
     nixpkgs._1password-gui
     # nixpkgs.gitAndTools.gh
@@ -57,6 +67,21 @@ in
     wl-clipboard
     fpp
     ripgrep
+
+    neovim
+    nixpkgs.vscode
+
+    direnv
+
+    nixpkgs.google-chrome
+    autojump
+
+    stylua
+    shellcheck
+    commitlint
+    yamllint
+    nixfmt
+    statix
   ];
   gtk.enable = true;
 
@@ -67,14 +92,11 @@ in
     };
   };
 
-  xdg = {
-    enable = true;
-  };
+  xdg = { enable = true; };
 
-
-  dconf.settings = (dconf_settings {lib = lib;}).dconf.settings // {
+  dconf.settings = (dconf_settings { inherit lib; }).dconf.settings // {
     "org/gnome/desktop/wm/keybindings" = {
-      switch-applications = [ "<Super>space" "<Alt>Tab"];
+      switch-applications = [ "<Super>space" "<Alt>Tab" ];
       toggle-overview = [ "<Super>s" ];
     };
 
@@ -85,16 +107,10 @@ in
     htop.enable = true;
     jq.enable = true;
     tmux.enable = true;
-    vscode = {
-      enable = true;
-      package = nixpkgs.vscode;
-    };
     firefox.enable = true;
     alacritty.enable = true;
     gpg.enable = true;
-    fish = {
-      enable = true;
-    };
+    fish = { enable = true; };
 
     starship = {
       enable = true;
@@ -116,11 +132,6 @@ in
       };
     };
 
-
-
-    neovim = {
-      enable = true;
-    };
     lazygit.enable = true;
     gitui.enable = true;
     gh = {
@@ -133,44 +144,42 @@ in
       userEmail = "git@kaushikc.org";
 
       aliases = {
-        amend      = "commit --amend -C HEAD";
-        b          = "branch --color -v";
-        ca         = "commit --amend";
-        changes    = "diff --name-status -r";
-        clone      = "clone --recursive";
-        co         = "checkout";
-        cp         = "cherry-pick";
-        dc         = "diff --cached";
-        dh         = "diff HEAD";
-        ds         = "diff --staged";
-        su         = "submodule update --init --recursive";
-        undo       = "reset --soft HEAD^";
-        l          = "log --graph --pretty=format:'%Cred%h%Creset"
-                   + " —%Cblue%d%Creset %s %Cgreen(%cr)%Creset'"
-                   + " --abbrev-commit --date=relative --show-notes=*";
-        gs         = "!git pull & git commit -a -m \"updates\" & git pull";
+        amend = "commit --amend -C HEAD";
+        b = "branch --color -v";
+        ca = "commit --amend";
+        changes = "diff --name-status -r";
+        clone = "clone --recursive";
+        co = "checkout";
+        cp = "cherry-pick";
+        dc = "diff --cached";
+        dh = "diff HEAD";
+        ds = "diff --staged";
+        su = "submodule update --init --recursive";
+        undo = "reset --soft HEAD^";
+        l = "log --graph --pretty=format:'%Cred%h%Creset"
+          + " —%Cblue%d%Creset %s %Cgreen(%cr)%Creset'"
+          + " --abbrev-commit --date=relative --show-notes=*";
+        gs = ''!git pull & git commit -a -m "updates" & git pull'';
       };
 
       extraConfig = {
         branch.autosetupmerge = true;
-        github.user           = "kaychaks";
-        pull.rebase           = true;
+        github.user = "kaychaks";
+        pull.rebase = true;
 
         color = {
-          status      = "auto";
-          diff        = "auto";
-          branch      = "auto";
+          status = "auto";
+          diff = "auto";
+          branch = "auto";
           interactive = "auto";
-          ui          = "auto";
-          sh          = "auto";
+          ui = "auto";
+          sh = "auto";
         };
 
-        submodule = {
-          recurse = true;
-        };
+        submodule = { recurse = true; };
 
         #credential.helper = "!git-credential-1password";
-      };      
+      };
 
       signing = {
         signByDefault = false;
@@ -212,12 +221,12 @@ in
       hashKnownHosts = true;
 
       matchBlocks = {
-          kutir = {
-            hostname = "139.59.56.101";
-            user = "kaushikc";
-#            identityFile = "/home/kaushik/Documents/keys/do-nixos";
-            identitiesOnly = true;
-          };
+        kutir = {
+          hostname = "139.59.56.101";
+          user = "kaushikc";
+          #            identityFile = "/home/kaushik/Documents/keys/do-nixos";
+          identitiesOnly = true;
+        };
       };
     };
   };

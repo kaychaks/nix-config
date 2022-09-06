@@ -15,7 +15,7 @@ grep_after: 6
 window:
   dynamic_padding: true
   startup_mode: Maximized
-  decorations: none
+  decorations: full
   padding:
     x: 10
     y: 10
@@ -127,14 +127,15 @@ colors:
     - { index: 21, color: '0xe8e4cf' }  
 
 key_bindings:
-  - { key: Paste,                                       action: Paste          }
-  - { key: Copy,                                        action: Copy           }
-  - { key: L,         mods: Control,                    action: ClearLogNotice }
-  - { key: L,         mods: Control, mode: ~Vi|~Search, chars: "\x0c"          }
-  - { key: PageUp,    mods: Shift,   mode: ~Alt,        action: ScrollPageUp,  }
-  - { key: PageDown,  mods: Shift,   mode: ~Alt,        action: ScrollPageDown }
-  - { key: Home,      mods: Shift,   mode: ~Alt,        action: ScrollToTop,   }
-  - { key: End,       mods: Shift,   mode: ~Alt,        action: ScrollToBottom }
+  - { key: Paste,                                       action: Paste             }
+  - { key: Copy,                                        action: Copy              }
+  - { key: L,         mods: Control,                    action: ClearLogNotice    }
+  - { key: L,         mods: Control, mode: ~Vi|~Search, chars: "\x0c"             }
+  - { key: PageUp,    mods: Shift,   mode: ~Alt,        action: ScrollPageUp,     }
+  - { key: PageDown,  mods: Shift,   mode: ~Alt,        action: ScrollPageDown    }
+  - { key: Home,      mods: Shift,   mode: ~Alt,        action: ScrollToTop,      }
+  - { key: End,       mods: Shift,   mode: ~Alt,        action: ScrollToBottom    }
+  - { key: M,         mods: Alt,                          action: ToggleFullscreen  }
 
   # Vi Mode
   - { key: Space,  mods: Shift|Control, mode: ~Search,    action: ToggleViMode            }
