@@ -135,8 +135,8 @@ in {
     lazygit.enable = true;
     gitui.enable = true;
     gh = {
-      enable = true;
-      enableGitCredentialHelper = true;
+      enable = false;
+      #  enableGitCredentialHelper = true;
     };
     git = {
       enable = true;
@@ -178,7 +178,9 @@ in {
 
         submodule = { recurse = true; };
 
-        #credential.helper = "!git-credential-1password";
+        credential.helper = "${
+            pkgs.git.override { withLibsecret = true; }
+          }/bin/git-credential-libsecret";
       };
 
       signing = {

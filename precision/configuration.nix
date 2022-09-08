@@ -10,6 +10,10 @@
     <home-manager/nixos>
   ];
 
+  nix.extraOptions = ''
+    netrc-file = /home/kaushik/.netrc
+  '';
+
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -61,6 +65,10 @@
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
+
+  # keybase
+  services.keybase.enable = true;
+  services.kbfs.enable = true;
 
   # Enable sound with pipewire.
   sound.enable = true;
