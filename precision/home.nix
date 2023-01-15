@@ -68,7 +68,6 @@ in {
     fpp
     ripgrep
 
-    neovim
     nixpkgs.vscode
 
     direnv
@@ -82,6 +81,12 @@ in {
     yamllint
     nixfmt
     statix
+
+    nodejs-18_x
+    nixpkgs.nodePackages.pnpm
+
+    # nixpkgs.helix
+    cargo-make
   ];
   gtk.enable = true;
 

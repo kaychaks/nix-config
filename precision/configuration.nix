@@ -12,6 +12,18 @@
 
   nix.extraOptions = ''
     netrc-file = /home/kaushik/.netrc
+    connect-timeout = 5
+    log-lines = 25
+    min-free = 128000000
+    max-free = 1000000000
+
+    experimental-features = nix-command flakes
+    fallback = true
+    warn-dirty = false
+    auto-optimise-store = true
+
+    keep-outputs = true
+
   '';
 
   # Bootloader.
@@ -116,8 +128,16 @@
 
   home-manager.users.kaushik = import ./home.nix;
 
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
+  # nix config
+  nixpkgs.config = {
+
+    # Allow unfree packages
+    allowUnfree = true;
+
+    packageOverrides = pkgs: {
+      unstable = import <nixpkgs> { config = config.nixpkgs.config; };
+    };
+  };
 
   environment.variables = {
     LC_CTYPE = "en_US.UTF-8";
@@ -140,6 +160,10 @@
     clang
     globalprotect-openconnect
     gnomeExtensions.appindicator
+    openssl
+    binutils
+    pkg-config
+    unstable.neovim
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
