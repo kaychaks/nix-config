@@ -8,6 +8,7 @@ let
   nixpkgs = import <nixpkgs> { config = { allowUnfree = true; }; };
 
 in {
+  home.stateVersion = "22.11";
   xdg.configFile."alacritty/alacritty.yml".source =
     "${nix_config_dir}/plain-configs/alacritty/alacritty.yml";
   home.file.".tmux.conf".source =
@@ -23,6 +24,8 @@ in {
 
   nixpkgs.config.allowUnfree = true;
 
+  nixpkgs.config.permittedInsecurePackages = ["electron-20.3.11"];
+
   home.sessionVariables = {
     EDITOR = "vim";
     VISUAL = "vim";
@@ -33,60 +36,62 @@ in {
     LANG = "en_US.UTF-8";
   };
 
-  home.packages = with pkgs; [
-    gnome.gnome-shell-extensions
-    gnome.gnome-tweaks
+  home.packages = [
+    pkgs.gnome.gnome-shell-extensions
+    pkgs.gnome.gnome-tweaks
 
-    gnomeExtensions.appindicator
-    gnomeExtensions.pop-shell
+    pkgs.gnomeExtensions.appindicator
+    pkgs.gnomeExtensions.pop-shell
 
-    tmuxPlugins.continuum
-    tmuxPlugins.logging
-    tmuxPlugins.resurrect
-    tmuxPlugins.sidebar
-    tmuxPlugins.urlview
-    tmuxPlugins.yank
-    tmuxPlugins.fpp
+    pkgs.tmuxPlugins.continuum
+    pkgs.tmuxPlugins.logging
+    pkgs.tmuxPlugins.resurrect
+    pkgs.tmuxPlugins.sidebar
+    pkgs.tmuxPlugins.urlview
+    pkgs.tmuxPlugins.yank
+    pkgs.tmuxPlugins.fpp
 
-    rustup
-    rust-analyzer
+    pkgs.rustup
+    pkgs.rust-analyzer
 
-    github-desktop
+    # pkgs.github-desktop
     #firefox-wayland
-    dconf2nix
+    pkgs.dconf2nix
 
-    logseq
+    pkgs.logseq
 
-    nixpkgs._1password
-    nixpkgs._1password-gui
+    pkgs._1password
+    pkgs._1password-gui
     # nixpkgs.gitAndTools.gh
     nixpkgs.gitAndTools.git-annex
     nixpkgs.gitAndTools.git-open
     # nixpkgs.gitAndTools.git-crypt
 
-    wl-clipboard
-    fpp
-    ripgrep
+    pkgs.wl-clipboard
+    pkgs.fpp
+    pkgs.ripgrep
 
     nixpkgs.vscode
 
-    direnv
+    pkgs.direnv
 
-    nixpkgs.google-chrome
-    autojump
+    pkgs.google-chrome
+    pkgs.autojump
 
-    stylua
-    shellcheck
-    commitlint
-    yamllint
-    nixfmt
-    statix
+    pkgs.stylua
+    pkgs.shellcheck
+    pkgs.commitlint
+    pkgs.yamllint
+    pkgs.nixfmt
+    pkgs.statix
 
-    nodejs-18_x
+    pkgs.nodejs-18_x
     nixpkgs.nodePackages.pnpm
+    pkgs.nodePackages.sass
 
     # nixpkgs.helix
-    cargo-make
+    pkgs.cargo-make
+    pkgs.broot
   ];
   gtk.enable = true;
 

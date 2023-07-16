@@ -1,5 +1,5 @@
 # Fix some utf-8 errors
-set -gx LC_ALL en_CA.UTF-8
+#set -gx LC_ALL en_CA.UTF-8
 
 if status is-interactive
     # Commands to run in interactive sessions can go here

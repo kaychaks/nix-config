@@ -4,7 +4,9 @@
 
 { config, pkgs, ... }:
 
-{
+let nixpkgs = import <nixpkgs> { config = { allowUnfree = true; }; };
+
+in {
   imports = [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
     <home-manager/nixos>
@@ -117,16 +119,15 @@
     extraGroups =
       [ "networkmanager" "wheel" "video" "audio" "disk" "systemd-journal" ];
     useDefaultShell = true;
-    packages = with pkgs;
-      [
-        firefox
-        #  thunderbird
-      ];
+    packages = [
+      nixpkgs.firefox
+      #  thunderbird
+    ];
   };
 
   users.defaultUserShell = pkgs.fish;
 
-  home-manager.users.kaushik = import ./home.nix;
+  home-manager.users.kaushik = import ./home.nix; 
 
   # nix config
   nixpkgs.config = {
@@ -135,8 +136,12 @@
     allowUnfree = true;
 
     packageOverrides = pkgs: {
-      unstable = import <nixpkgs> { config = config.nixpkgs.config; };
+      unstable = import <nixpkgs> { inherit (config.nixpkgs) config; };
     };
+
+    permittedInsecurePackages = [
+      "electron-20.3.11"
+    ];
   };
 
   environment.variables = {
@@ -201,6 +206,6 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "22.05"; # Did you read the comment?
+  system.stateVersion = "22.11"; # Did you read the comment?
 
 }
