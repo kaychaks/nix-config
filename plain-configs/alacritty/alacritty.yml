@@ -15,6 +15,7 @@ grep_after: 6
 window:
   dynamic_padding: true
   startup_mode: Maximized
+  option_as_alt: true
   decorations: full
   padding:
     x: 10
@@ -50,7 +51,7 @@ selection:
   save_to_clipboard: true
 
 hide_cursor_when_typing: false
-alt_send_esc: true
+# alt_send_esc: true
 
 # # Colors (Gruvbox dark)
 # colors:

@@ -10,7 +10,7 @@ let
 in {
   home.stateVersion = "22.11";
   xdg.configFile."alacritty/alacritty.yml".source =
-    "${nix_config_dir}/plain-configs/alacritty/alacritty.yml";
+    "${nix_config_dir}/plain-configs/alacritty/alacritty-linux.yml";
   home.file.".tmux.conf".source =
     "${nix_config_dir}/plain-configs/tmux/tmux.conf";
   xdg.configFile."starship.toml".source =
@@ -27,8 +27,8 @@ in {
   nixpkgs.config.permittedInsecurePackages = ["electron-20.3.11"];
 
   home.sessionVariables = {
-    EDITOR = "vim";
-    VISUAL = "vim";
+    EDITOR = "hx";
+    VISUAL = "hx";
     BROWSER = "firefox";
     LC_CTYPE = "en_US.UTF-8";
     LC_ALL = "en_US.UTF-8";
@@ -52,7 +52,6 @@ in {
     pkgs.tmuxPlugins.fpp
 
     pkgs.rustup
-    pkgs.rust-analyzer
 
     # pkgs.github-desktop
     #firefox-wayland
@@ -89,7 +88,6 @@ in {
     nixpkgs.nodePackages.pnpm
     pkgs.nodePackages.sass
 
-    # nixpkgs.helix
     pkgs.cargo-make
     pkgs.broot
   ];
@@ -240,6 +238,28 @@ in {
           identitiesOnly = true;
         };
       };
+    };
+    helix = {
+      enable = true;
+      package = nixpkgs.helix;
+      settings = {
+        editor = {
+          auto-format = false;
+          auto-save = true;
+          completion-replace = true;
+          auto-info = false;
+          color-modes = true;
+          text-width = 100;
+          cursor-shape = {
+            insert = "bar";
+          };
+          auto-pairs = true;
+          soft-wrap = {
+            enable = true;
+          };
+        };
+      };
+      
     };
   };
 
