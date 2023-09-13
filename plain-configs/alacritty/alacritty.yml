@@ -3,12 +3,11 @@ env:
   COLORTERM: truecolor
 
 shell:
-  program: /bin/zsh
+  program: /usr/local/bin/fish
   args:
     - -l
     - -c
     - tmux attach || tmux
-
 grep_after: 6
 
 window:
@@ -43,7 +42,7 @@ font:
 
 draw_bold_text_with_bright_colors: true
 
-working_directory: /Users/139137/developer/src
+working_directory: /Users/kaushikchakraborty/Dev/
 
 selection:
   semantic_escape_chars: ",│`|:\"' ()[]{}<>\t"
