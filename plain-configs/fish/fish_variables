@@ -1,6 +1,8 @@
 # This file contains fish universal variable definitions.
 # VERSION: 3.0
-SETUVAR --export EDITOR:nvim
+SETUVAR --export ANDROID_HOME:/Users/139137/Library/Android/sdk/
+SETUVAR --export EDITOR:/usr/local/bin/hx
+SETUVAR --export JAVA_HOME:/Library/Java/JavaVirtualMachines/zulu\x2d11\x2ejdk/Contents/Home
 SETUVAR --export NODE_VERSIONS:/Users/139137/\x2elocal/share/nvm
 SETUVAR --export NODE_VERSION_PREFIX:v
 SETUVAR --export SPACESHIP_PROMPT_ASYNC:FALSE

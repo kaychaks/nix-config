@@ -1,6 +1,8 @@
 env:
   TERM: alacritty
   COLORTERM: truecolor
+  EDITOR: hx
+  # LC_ALL: "en_US.UTF-8"
 
 shell:
   program: /usr/local/bin/fish
@@ -16,8 +18,8 @@ window:
   opacity: 0.98
   option_as_alt: Both
   padding:
-    x: 10
-    y: 10
+    x: 1
+    y: 0
 
 scrolling:
   history: 100000
@@ -40,10 +42,10 @@ font:
   size: 16.0
   offset:
     x: 0
-    y: 2
+    y: 10
 
 mouse:
-  hide_when_typing: true
+  hide_when_typing: false
 
 draw_bold_text_with_bright_colors: true
 
@@ -301,3 +303,9 @@ key_bindings:
 
   - { key: D, mods: Command, chars: "\x1bd" } # Cmd + d;
   - { key: G, mods: Command, chars: "\x1bg" } # Cmd + g;
+  - { key: E, mods: Command, chars: "\x1be" } # Cmd + e;
+  - { key: T, mods: Command, chars: "\x1bt" } # Cmd + t;
+
+  - { key: S, mods: Command, chars: "\x13" } # Ctrl + s;
+  - { key: Backslash, mods: Command, chars: "\x1c" } # Ctrl + \;
+  

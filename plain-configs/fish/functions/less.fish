@@ -1,3 +1,4 @@
-function less --wraps=vim --description 'alias less vim'
-  vim $argv; 
+function less --wraps=vim --wraps=hx --description 'alias less hx'
+  hx $argv
+        
 end
