@@ -1,4 +1,4 @@
-theme = "gruvbox"
+theme = "catppuccin_frappe"
 
 [editor]
 cursorline = true
@@ -35,13 +35,16 @@ enable = true
 j = { k = "normal_mode" }
 C-r = ":config-reload"
 C-q = ":write-quit-all"
+C-s = ":write-all"
 
 [keys.normal]
-C-s = ":w"
+C-s = ":write-all"
 C-r = ":config-reload"
 C-q = ":write-quit-all"
 C-j = ["extend_to_line_bounds", "delete_selection", "paste_after"]
 C-k = ["extend_to_line_bounds", "delete_selection", "move_line_up", "paste_before"]
+"A-F2" = ":format"
+"A-F1" = ":config-open"
 
 [keys.normal.space]
 "o" = "file_picker_in_current_buffer_directory"
