@@ -1,0 +1,51 @@
+theme = "gruvbox"
+
+[editor]
+cursorline = true
+auto-save = true
+auto-format = false
+true-color = true
+# bufferline = "multiple"
+color-modes = true
+
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+select = "underline"
+
+[editor.statusline]
+mode.normal = "N"
+mode.insert = "I"
+mode.select = "S"
+
+[editor.whitespace.render]
+# space = "all"
+# tab = "all"
+
+[editor.indent-guides]
+render = false
+
+[editor.soft-wrap]
+enable = true
+
+[editor.file-picker]
+# git-ignore = false
+
+[keys.insert]
+j = { k = "normal_mode" }
+C-r = ":config-reload"
+C-q = ":write-quit-all"
+
+[keys.normal]
+C-s = ":w"
+C-r = ":config-reload"
+C-q = ":write-quit-all"
+C-j = ["extend_to_line_bounds", "delete_selection", "paste_after"]
+C-k = ["extend_to_line_bounds", "delete_selection", "move_line_up", "paste_before"]
+
+[keys.normal.space]
+"o" = "file_picker_in_current_buffer_directory"
+"w" = { "d" = ":buffer-close"}
+
+[keys.normal.space.c]
+"f" = ":format"
