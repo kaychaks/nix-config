@@ -13,3 +13,14 @@ fish_add_path -pP "$HOME/.cargo/bin"
 
 # direnv
 direnv hook fish | source
+
+# tabtab source for packages
+# uninstall by removing these lines
+[ -f ~/.config/tabtab/fish/__tabtab.fish ]; and . ~/.config/tabtab/fish/__tabtab.fish; or true
+
+# ruby
+status --is-interactive; and rbenv init - fish | source
+
+# bit
+set -gx PATH $PATH "/Users/139137/bin"
+# bit end
