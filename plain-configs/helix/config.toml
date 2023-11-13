@@ -23,7 +23,7 @@ mode.select = "S"
 # tab = "all"
 
 [editor.indent-guides]
-render = false
+render = true
 
 [editor.soft-wrap]
 enable = true
