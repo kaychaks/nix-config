@@ -7,7 +7,7 @@
 
   config = {
 
-    boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "rtsx_pci_sdmmc" ];
+    boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
     boot.initrd.kernelModules = [ ];
     boot.kernelModules = [ "kvm-intel" ];
     boot.extraModulePackages = [ ];
@@ -30,10 +30,22 @@
     boot.initrd.systemd.enable = true;
     boot.loader.efi.canTouchEfiVariables = true;
 
-    # TODO: check path
-    boot.loader.efi.efiSysMountPoint = "/boot/efi";
+    boot.loader.efi.efiSysMountPoint = "/boot";
 
-    # TODO: add from current hardware-configuration
+    fileSystems = {
+      "/" : {
+        device = ""; # TODO
+        fsType = "ext4";
+      };
+      "/boot": {
+        device = ""; # TODO
+        fsType = "vfat";
+      };
+    };
+
+    swapDevices = [
+      { device = ""; } # TODO
+    ];
 
 
     nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
