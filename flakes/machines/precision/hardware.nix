@@ -1,5 +1,12 @@
 { config, lib, pkgs, modulesPath, ... }:
 
+let
+  make_mounts = import ./../functions/make_mounts.nix;
+  root = "";
+  boot = "";
+  swap = "";
+  mounts = make_mounts {inherit root boot swap};
+
 {
   imports =
     [ (modulesPath + "/installer/scan/not-detected.nix")
@@ -32,20 +39,9 @@
 
     boot.loader.efi.efiSysMountPoint = "/boot";
 
-    fileSystems = {
-      "/" : {
-        device = ""; # TODO
-        fsType = "ext4";
-      };
-      "/boot": {
-        device = ""; # TODO
-        fsType = "vfat";
-      };
-    };
+    fileSystems = mounts.fileSystems;
 
-    swapDevices = [
-      { device = ""; } # TODO
-    ];
+    swapDevices = mounts.swapDevices;
 
 
     nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";

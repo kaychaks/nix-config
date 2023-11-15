@@ -21,6 +21,30 @@
     };
 
 
+    environment.systemPackages = with pkgs; [
+
+      helix
+      alacritty
+      direnv
+      git
+      jq
+      fzf
+      ripgrep
+      lsof
+      htop #top replacement
+      bat #cat replacement
+      broot #tree replacement
+      fd #find replacement
+      sd #sed replacement
+      lsd #ls replacement
+      killall
+      bottom #process monitor
+      graphviz
+      curl
+      ffmpeg
+    ];
+
+
     nix.extraOptions = ''
       experimental-features = nix-command flakes
       builders-use-substitutes = true
