@@ -52,6 +52,7 @@ let
     networking.wireless.enable = false; # For Network Manager
     networking.useDHCP = lib.mkDefault true;
 
+    security.rtkit.enable = true;
     sound.enable = true;
     services.pipewire = {
       enable = true;
