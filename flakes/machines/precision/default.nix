@@ -1,7 +1,10 @@
 # default nixos configurations
-{ config, lib, pkgs }: {
+{ config, lib, pkgs, ... }: 
+
+{
+
   config = {
-    networking.hostname = "tardis";
+    networking.hostName = "tardis";
     networking.domain = "tardis.home";
 
     time.timeZone = "Asia/Kolkata";
@@ -43,6 +46,8 @@
       curl
       ffmpeg
     ];
+
+    programs.fish.enable = true;
 
 
     nix.extraOptions = ''

@@ -95,7 +95,7 @@ in
     enable = true;
   };
 
-  home.packages = with pkgs; {
+  home.packages = with pkgs; [
 
     gnomeExtensions.user-themes
     gnomeExtensions.tray-icons-reloaded
@@ -104,7 +104,7 @@ in
     gnomeExtensions.space-bar
 
     firefox
-  }
+  ];
 
 
   programs.home-manager.enable = true;

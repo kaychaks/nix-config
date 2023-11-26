@@ -62,7 +62,6 @@ with lib.hm.gvariant;
     };
 
     "org/gnome/desktop/wm/preferences" = {
-      button-layout = "close";
       focus-mode = "click";
       num-workspaces = 4;
       workspace-names = [ "Main" ];

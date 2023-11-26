@@ -6,17 +6,16 @@
     users.mutableUsers = false;
 
     programs.nm-applet.enable = true;
-
   
     fonts.fontconfig = {
       enable = true;
       antialias = true;
       hinting.enable = true;
-      hinting.style = "hintfull";
+      hinting.style = "full";
     };
 
-    fonts.enableDefaultFonts = true;
-    fonts.fonts = with pkgs; [
+    fonts.enableDefaultPackages = true;
+    fonts.packages = with pkgs; [
       noto-fonts
       noto-fonts-cjk
       noto-fonts-emoji

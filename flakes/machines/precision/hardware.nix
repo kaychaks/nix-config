@@ -1,11 +1,12 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 let
-  make_mounts = import ./../functions/make_mounts.nix;
+  make_mounts = import ./../../functions/make_mounts.nix;
   root = "";
   boot = "";
   swap = "";
-  mounts = make_mounts {inherit root boot swap};
+  mounts = make_mounts {inherit root boot swap;};
+in
 
 {
   imports =

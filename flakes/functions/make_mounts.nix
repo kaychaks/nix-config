@@ -4,16 +4,16 @@
   fileSystems = {
     "/" = {
       device = "/dev/disk/by-uuid/{root}";
-      fsType = "ext4"
+      fsType = "ext4";
     };
 
     "/boot" = {
       device = "/dev/disk/by-uuid/{boot}";
-      fsType = "vfat"
+      fsType = "vfat";
     };
   };
 
   swapDevices = [
-    { device = "/dev/disk/by-uuid/{swap}"}
+    { device = "/dev/disk/by-uuid/{swap}"; }
   ]; 
 }

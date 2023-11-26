@@ -3,11 +3,12 @@
   config = {
 
     home-manager.users.kc = ./kc.nix;
-    users.uesrs.kc = {
+    services.xserver.displayManager.autoLogin.user = "kc";
+    users.users.kc = {
       isNormalUser = true;
       home = "/home/kc";
       createHome = true;
-      passwordFile = "/var/enc-pass/kc";
+      hashedPasswordFile = "/var/enc-pass/kc";
       shell = pkgs.fish;
       extraGroups = [ "wheel" "disk" "networkmanager" "kvm" "plugdev" "video" "audio" ];
     };
