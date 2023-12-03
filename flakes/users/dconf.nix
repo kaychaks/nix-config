@@ -5,9 +5,9 @@ with lib.hm.gvariant;
 {
   dconf.settings = {
 
-    "org/gnome/Console" = {
-      theme = "palenight";
-    };
+    # "org/gnome/Console" = {
+    #   theme = "palenight";
+    # };
 
 
     "org/gnome/desktop/input-sources" = {
@@ -74,7 +74,6 @@ with lib.hm.gvariant;
       disabled-extensions = [];
       enabled-extensions = [
         "user-theme@gnome-shell-extensions.gcampax.github.com"
-        "trayIconsReloaded@selfmade.pl"
         "Vitals@CoreCoding.com"
         "dash-to-panel@jderose9.github.com"
         "space-bar@luchrioh"
@@ -82,9 +81,9 @@ with lib.hm.gvariant;
       favorite-apps = [ "org.gnome.Calendar.desktop" "org.gnome.Nautilus.desktop" "firefox.desktop" "org.gnome.Settings.desktop" ];
     };
 
-    "org/gnome/shell/extensions/user-theme" = {
-      name = "palenight";
-    };
+    # "org/gnome/shell/extensions/user-theme" = {
+    #   name = "palenight";
+    # };
 
     "org/gnome/shell/extensions/vitals" = {
       show-storage = false;

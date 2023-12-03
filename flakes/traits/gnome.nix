@@ -45,7 +45,6 @@
     systemd.targets.hybrid-sleep.enable = false;
     services.xserver.displayManager.gdm.autoSuspend = false;
 
-    
   };
-  
+
 } 

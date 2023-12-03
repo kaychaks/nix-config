@@ -3,7 +3,7 @@
 {
 
   config = {
-    users.mutableUsers = false;
+    users.mutableUsers = true;
 
     programs.nm-applet.enable = true;
   
