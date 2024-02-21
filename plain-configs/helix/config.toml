@@ -36,6 +36,12 @@ j = { k = "normal_mode" }
 C-r = ":config-reload"
 C-q = ":write-quit-all"
 C-s = ":write-all"
+A-h = "move_char_left"
+A-j = "move_line_down"
+A-k = "move_line_up"
+A-l = "move_char_right"
+A-o = "open_below"
+A-p = "open_above"
 
 [keys.normal]
 C-s = ":write-all"
@@ -45,6 +51,19 @@ C-j = ["extend_to_line_bounds", "delete_selection", "paste_after"]
 C-k = ["extend_to_line_bounds", "delete_selection", "move_line_up", "paste_before"]
 "A-F2" = ":format"
 "A-F1" = ":config-open"
+"x" = "extend_to_line_bounds"
+"X" = "extend_line"
+"K" = "hover"
+"A-k" = "keep_selections"
+I = ["split_selection_on_newline","insert_at_line_start"]
+A = ["split_selection_on_newline","insert_at_line_end"]
+Z = ["keep_primary_selection","collapse_selection"]
+
+[keys.select]
+"x" = "extend_to_line_bounds"
+"X" = "extend_line"
+"g" = { "e" = "goto_file_end" }
+Z = ["keep_primary_selection","collapse_selection","normal_mode"]
 
 [keys.normal.space]
 "o" = "file_picker_in_current_buffer_directory"
@@ -52,3 +71,7 @@ C-k = ["extend_to_line_bounds", "delete_selection", "move_line_up", "paste_befor
 
 [keys.normal.space.c]
 "f" = ":format"
+
+[keys.normal.g]
+"[" = ["hsplit","jump_view_up","goto_definition"]
+"]" = ["vsplit","jump_view_up","goto_definition"]
