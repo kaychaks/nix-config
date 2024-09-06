@@ -2,3 +2,17 @@
 name = "rust"
 auto-format = false
 indent = { tab-width = 2, unit = "  " }
+[[language]]
+name = "unison"
+scope = "source.unison"
+injection-regex = "unison"
+file-types = ["u"]
+shebangs = []
+roots = []
+auto-format = false
+comment-token = "--"
+indent = { tab-width = 2, unit = "  " }
+language-servers = [ "ucm" ]
+[language-server.ucm]
+command = "nc" # or 'ncat' or 'netcat'
+args = ["localhost", "5757"]

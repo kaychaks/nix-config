@@ -45,6 +45,8 @@ C-j = ["extend_to_line_bounds", "delete_selection", "paste_after"]
 C-k = ["extend_to_line_bounds", "delete_selection", "move_line_up", "paste_before"]
 "A-F2" = ":format"
 "A-F1" = ":config-open"
+# C-y = ":sh zellij run -f -x 10% -y 10% --width 80% --height 80% -- bash ~/.config/helix/yazi-picker.sh"
+C-y = ":run-shell-command tmux display-popup -BEE yazi --chooser-file=/dev/stdout"
 
 [keys.normal.space]
 "o" = "file_picker_in_current_buffer_directory"
@@ -52,3 +54,4 @@ C-k = ["extend_to_line_bounds", "delete_selection", "move_line_up", "paste_befor
 
 [keys.normal.space.c]
 "f" = ":format"
+
