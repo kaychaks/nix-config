@@ -1,11 +1,16 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, nixos-conf-editor, system, ... }:
 
 let
 
   dconf_settings = import ./dconf.nix;
   eDP1 = "00ffffffffffff0006afeb4100000000221c0104b522137802af95a65435b5260f50540000000101010101010101010101010101010152d000a0f0703e803020350058c11000001a52d000a0f07068823020350025a51000001a000000fe00375837314880423135365a414e0000000000054122b2001200000b010a2020013902030f00e3058000e606050160602800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000aa";
-  DP14 = "00ffffffffffff0010ace0404c353032271c0104b5371f783aa195af4f35b7260c5054a54b00714fa9408180d1c00101010101010101565e00a0a0a029503020350029372100001a000000ff003550564d503839513230354c0a000000fc0044454c4c20555032353136440a000000fd00324b1e5819010a20202020202001f302031cf14f90050403020716010611121513141f23091f0783010000023a801871382d40582c450029372100001e7e3900a080381f4030203a0029372100001a011d007251d01e206e28550029372100001ebf1600a08038134030203a0029372100001a00000000000000000000000000000000000000000000000000000086";
+  DP = "00ffffffffffff0010ace0404c353032271c0104b5371f783aa195af4f35b7260c5054a54b00714fa9408180d1c00101010101010101565e00a0a0a029503020350029372100001a000000ff003550564d503839513230354c0a000000fc0044454c4c20555032353136440a000000fd00324b1e5819010a20202020202001f302031cf14f90050403020716010611121513141f23091f0783010000023a801871382d40582c450029372100001e7e3900a080381f4030203a0029372100001a011d007251d01e206e28550029372100001ebf1600a08038134030203a0029372100001a00000000000000000000000000000000000000000000000000000086";
   notify = "${pkgs.libnotify}/bin/notify-send";
+  rust-overlay = {
+      url = "github:oxalica/rust-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+  };
+
 
 in
 
@@ -14,6 +19,12 @@ in
   home.username = "kc";
   home.homeDirectory = "/home/kc";
   # home.sessionVariables.GTK_THEME = "palenight";
+  home.sessionVariables = {
+    # RUST_SRC_PATH = "${pkgs.rustToolchain}/lib/rustlib/src/rust/library";
+  };
+
+  nixpkgs.overlays = [ rust-overlay.overlays.default ];
+
 
   programs.git = {
     enable = true;
@@ -108,6 +119,17 @@ in
 
     firefox
     dconf2nix
+
+    unison-ucm
+    # rustToolchain
+    # rust-bin.stable.latest.default
+    rust-analyzer
+    python3
+    shellcheck
+    nodejs
+    nixos-conf-editor.packages.${system}.nixos-conf-editor
+
+    brave
   ];
 
   programs.autorandr = {
@@ -124,10 +146,10 @@ in
               DPI=280
               ;;
             docked)
-              DPI=117
+              DPI=280
               ;;
             clamshell)
-              DPI=117
+              DPI=280
               ;;
             *)
               ${notify} -i display "Unknown profle: $AUTORANDR_CURRENT_PROFILE"
@@ -151,7 +173,7 @@ in
             mode = "3840x2160";
             rate = "60.0";
             rotate = "normal";
-            crtc = 0;
+            # crtc = 0;
           };
         };
       };
@@ -159,10 +181,10 @@ in
       "clamshell" = {
         
         fingerprint = {
-          DP-1-4 = DP14;
+          DP-1-5 = DP;
         };
         config = {
-          DP-1-4 = {
+          DP-1-5 = {
             enable = true;
             primary = true;
             position= "0x0";
@@ -170,7 +192,7 @@ in
             rate = "59.95";
             rotate = "normal";
             crtc = 0;
-            dpi = 178;
+            dpi = 280;
           };
         };      
       };
@@ -178,18 +200,18 @@ in
       "docked" = {
         fingerprint = {
           eDP-1 = eDP1;
-          DP-1-4 = DP14;
+          DP-1-5 = DP;
         };
         config = {
-          DP-1-4 = {
+          DP-1-5 = {
             enable = true;
             primary = true;
             position= "3840x0";
             mode = "2560x1440";
             rate = "59.95";
             rotate = "normal";
-            crtc = 0;
-            dpi = 178;
+            # crtc = 0;
+            dpi = 96;
           };
           eDP-1 = {
             enable = true;
@@ -198,7 +220,7 @@ in
             mode = "3840x2160";
             rate = "60.0";
             rotate = "normal";
-            crtc = 1;
+            # crtc = 1;
           };
         };
       };

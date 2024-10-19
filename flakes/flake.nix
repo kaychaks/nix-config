@@ -7,7 +7,7 @@
 
   inputs = {
     # stable nixpkgs
-    nixpkgs_stable.url = "github:NixOS/nixpkgs/nixos-23.05";
+    nixpkgs_stable.url = "github:NixOS/nixpkgs/nixos-24.05";
     # unstable nixpkgs
     nixpkgs_unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
@@ -19,44 +19,59 @@
     };
 
     nixpkgs.follows = "nixpkgs_unstable";
+
+    nixos-conf-editor.url = "github:snowfallorg/nixos-conf-editor";
+
+    unison-lang = {
+      url = "github:ceedubs/unison-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }: 
+  outputs = { self, nixpkgs, home-manager, nixos-conf-editor, unison-lang,... }: 
     let 
       supported_systems = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
       for_all_systems = f: nixpkgs.lib.genAttrs supported_systems (system: f system);
     in 
       {
-        devShells = for_all_systems
-          (system: import ./shells { inherit system; nixpkgs = nixpkgs; });
 
 
-        homeConfigurations = for_all_systems
-        (system:
-          let
-            pkgs = import nixpkgs {
-              inherit system;
-              overlays = [ self.overlays.default ];
-            };
-          in
-          {
-            kc = home-manager.lib.homeManagerConfiguration {
-              inherit pkgs;
-              modules = [
-                ./users/kc.nix
-              ];
-            };
-          }
-        );
+      
+        # homeConfigurations = for_all_systems
+        # (system:
+          # let
+          #   pkgs = import nixpkgs {
+          #     inherit system;
+          #     overlays = [ unison-lang.overlay rust-overlay.overlays ];
+          #   };
+          # in
+          # {
+            # kc = home-manager.lib.homeManagerConfiguration {
+              # inherit system;
+              # modules = [
+                # ./users/kc.nix
+              # ];
+            # };
+          # }
+        # );
 
 
         nixosConfigurations = 
           let
+            system = "x86_64-linux";
             x86_64Base = {
-              system = "x86_64-linux";
+              inherit system;
               modules = with self.nixosModules; [
-                ({ config = { nix.registry.nixpkgs.flake = nixpkgs; }; })
+                ({ config = { nixpkgs.overlays = [ unison-lang.overlay ]; nix.registry.nixpkgs.flake = nixpkgs; }; })
                 home-manager.nixosModules.home-manager
+                {
+                  home-manager.useGlobalPkgs = true;
+                  home-manager.useUserPackages = true;
+                  home-manager.users.kc = import ./users/kc.nix;
+                  home-manager.extraSpecialArgs = { inherit nixos-conf-editor; system = "x86_64-linux"; };
+                }
               ];
             };
           in
@@ -68,7 +83,7 @@
                   machines.precision
                   traits.machine
                   traits.security
-                  # traits.dev
+                  traits.dev
                   traits.gnome
                   users
                 ];

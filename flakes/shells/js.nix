@@ -1,5 +1,5 @@
-{ nixpkgs }: {
-  packages = with nixpkgs; [
+{ pkgs }: {
+  packages = with pkgs; [
     nodejs_20
   ];
 }

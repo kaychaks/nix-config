@@ -2,8 +2,8 @@
 {
   config = {
 
-    home-manager.users.kc = ./kc.nix;
-    services.xserver.displayManager.autoLogin.user = "kc";
+    # home-manager.users.kc = ./kc.nix;
+    services.displayManager.autoLogin.user = "kc";
     users.users.kc = {
       isNormalUser = true;
       home = "/home/kc";
