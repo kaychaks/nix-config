@@ -28,12 +28,14 @@ in
 
   programs.git = {
     enable = true;
+    package = pkgs.gitFull;
     userName = "Kaushik Chakraborty";
     userEmail = "git@kaushikc.org";
     extraConfig = {
       init = {
         defaultBranch = "main";
       };
+      credential.helper = "libsecret";
       branch.autosetupmerge = true;
       github.user = "kaychaks";
       pull.rebase = true;
