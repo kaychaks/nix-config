@@ -267,6 +267,8 @@
       haskellPackages.status-notifier-item
       haskellPackages.xmonad
       haskellPackages.dbus-hslogger
+
+      lazygit
     ];
   };
 
